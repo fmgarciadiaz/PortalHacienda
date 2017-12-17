@@ -9,14 +9,10 @@
 #   Test Package:              'Cmd + Shift + T'
 
 
-
-
-
 # Mensaje de Bienvenida
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage("Acceso al Portal de Datos de Hacienda - v0.1 - 12-2017 - fgd")
 }
-
 
 
 # Estructura de carpetas
@@ -66,10 +62,9 @@ Get <- function(series , start_date = NULL, end_date = NULL) {
 #'
 #' @return XTS con la serie expandida e intervalos de confianza al 95%
 #' @export
-#' @import timetk
-#' @importFrom timetk tk_make_future_timeseries
+#' @importFrom zoo "as.Date"
 #' @examples
-#' Forecast(Get("138.1_PAPDE_0_M_41"),12)
+#' X <- Forecast(Get("138.1_PAPDE_0_M_41"),12)
 Forecast <-function(SERIE , N = 6) {
   attr(SERIE, 'frequency') <- freq(SERIE)                                                   # Fijar su frecuencia en base a estimacion de periocididad
   SERIE.model <- forecast::auto.arima(SERIE, seasonal=TRUE , allowdrift = TRUE)             # Estimar modelo (clave fijar frecuencia antes!)
@@ -80,10 +75,11 @@ Forecast <-function(SERIE , N = 6) {
   SERIE.final <- rbind(SERIE.final,                                                         # pega el forecast, al que a su vez le pego fechas corregidas
                        xts::xts(cbind(y = SERIE.fit$mean, y.lo = SERIE.fit$lower, y.hi = SERIE.fit$upper),
                        timetk::tk_make_future_timeseries(timetk::tk_index(SERIE, timetk_idx = TRUE),
-                                                         n_future = N ,
-                                                         inspect_weekdays = TRUE,
-                                                         inspect_months = TRUE)))
+                                     n_future = N ,
+                                     inspect_weekdays = TRUE,
+                                     inspect_months = TRUE)))
   colnames(SERIE.final)[1] <- "y"
+  print("Serie extendida " %+% N %+% " períodos, usando el modelo auto detectado: " %+% SERIE.model)
   return(SERIE.final )
 }
 
@@ -97,7 +93,7 @@ Forecast <-function(SERIE , N = 6) {
 #' @importFrom utils "download.file"
 #'
 #' @examples
-#' SeriesPIB <- List("PIB")
+#' Listado <- List("PIB")
 List <- function(PATTERN = "*") {
   if (is.element(difftime(Sys.time(), file.info(data_dir %+% "series-tiempo-metadatos.csv")$ctime, units = "days") > 30, T) | !file.exists(data_dir %+% "series-tiempo-metadatos.csv"))
   {
@@ -115,6 +111,9 @@ List <- function(PATTERN = "*") {
 
 # Para correr antes de deploy
 #devtools::document()
+
+# Cargar listado de series
+Listado_Series <- List()
 
 #devtools::use_testthat()
 

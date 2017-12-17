@@ -18,5 +18,5 @@ List
 Buscar series con el pattern deseado
 }
 \examples{
-SeriesPIB <- List("PIB")
+Listado <- List("PIB")
 }

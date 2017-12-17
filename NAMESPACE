@@ -3,7 +3,6 @@
 export(Forecast)
 export(Get)
 export(List)
-import(timetk)
 importFrom(magrittr,"%>%")
-importFrom(timetk,tk_make_future_timeseries)
 importFrom(utils,"download.file")
+importFrom(zoo,"as.Date")
