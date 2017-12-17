@@ -84,7 +84,7 @@ Forecast <-function(SERIE , N = 6) {
                                                          inspect_weekdays = TRUE,
                                                          inspect_months = TRUE)))
   colnames(SERIE.final)[1] <- "y"
-  return(SERIE.final)
+  return(SERIE.final )
 }
 
 #' List
