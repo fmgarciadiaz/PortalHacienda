@@ -20,5 +20,5 @@ Forecast
 Extender series con forecast de auto.arima
 }
 \examples{
-X <- Forecast(Get("138.1_PAPDE_0_M_41"),12)
+X <- PortalHacienda::Forecast(Get("138.1_PAPDE_0_M_41"),12)
 }

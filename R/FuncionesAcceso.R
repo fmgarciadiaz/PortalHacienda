@@ -2,18 +2,20 @@
 # Libreria para Carga de Datos del Portal de Hacienda
 # FERGD 12-2017
 # =====================================================
-# Some useful keyboard shortcuts for package authoring:
-#
+
 #   Build and Reload Package:  'Cmd + Shift + B'
 #   Check Package:             'Cmd + Shift + E'
 #   Test Package:              'Cmd + Shift + T'
 
+#' @importFrom magrittr "%>%"
+#' @export
+magrittr::`%>%`
+#' @importFrom utils "download.file"
 
 # Mensaje de Bienvenida
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage("Acceso al Portal de Datos de Hacienda - v0.1 - 12-2017 - fgd")
 }
-
 
 # Estructura de carpetas
 "%+%" <- function(x, y) paste(x, y, sep = "") # se define %+% como concatenacion
@@ -32,7 +34,7 @@ freq <- function(x) {
 
 #' Acceder a la API del Portal de Datos
 #'
-#' \code{Get} devuelve la serie seleccionada en ID
+#' \code{Get} devuelve la serie seleccionada en series = ID
 #' @param series ID de la serie a obtener
 #' @param start_date Fecha de inicio
 #' @param end_date Fecha de final
@@ -41,15 +43,15 @@ freq <- function(x) {
 #' @export
 #' @examples
 #' X <- Get("138.1_PAPDE_0_M_41")
-Get <- function(series , start_date = NULL, end_date = NULL) {
-  url_base = 'http://apis.datos.gob.ar/series/api/series?'                       # Cambiar URL base si cambia en la WEB
-  suppressMessages(serie <- httr::content(httr::GET(url = url_base , query = list(ids = series ,
+Get <- function(series, start_date = NULL, end_date = NULL) {
+  url_base <- "http://apis.datos.gob.ar/series/api/series?"                      # Cambiar URL base si cambia en la WEB
+  suppressMessages(serie <- httr::content(httr::GET(url = url_base, query = list(ids = series,
                                                                       start_date = start_date,
                                                                       end_date = end_date,
-                                                                      format = "csv" ,
+                                                                      format = "csv",
                                                                       limit = 1000), encoding = "UTF-8")))
-  serie <- xts::xts(serie[,-1], order.by = lubridate::ymd(serie$indice_tiempo) , unique = TRUE)  # Pasar a XTS
-  #attr(serie, 'frequency') <- freq(serie)                                        # Fijar frecuencia de la serie en el XTS
+  serie <- xts::xts(serie[, -1], order.by = lubridate::ymd(serie$indice_tiempo), unique = TRUE)  # Pasar a XTS
+  attr(serie, "frequency") <- freq(serie)                                        # Fijar frecuencia de la serie en el XTS
   print("Cargados " %+% length(serie) %+% " datos, desde " %+% min(zoo::index(serie)) %+%
           " hasta " %+% max(zoo::index(serie)) %+% " Periodicidad: " %+% xts::periodicity(serie)$scale)
   return(serie)
@@ -64,18 +66,18 @@ Get <- function(series , start_date = NULL, end_date = NULL) {
 #' @export
 #' @importFrom zoo "as.Date"
 #' @examples
-#' X <- Forecast(Get("138.1_PAPDE_0_M_41"),12)
-Forecast <-function(SERIE , N = 6) {
-  attr(SERIE, 'frequency') <- freq(SERIE)                                                   # Fijar su frecuencia en base a estimacion de periocididad
-  SERIE.model <- forecast::auto.arima(SERIE, seasonal=TRUE , allowdrift = TRUE)             # Estimar modelo (clave fijar frecuencia antes!)
-  SERIE.fit <- forecast::forecast(SERIE.model, h=N , level = c(95))                         # Extraer forecasts
+#' X <- PortalHacienda::Forecast(Get("138.1_PAPDE_0_M_41"),12)
+Forecast <- function(SERIE, N = 6) {
+  attr(SERIE, "frequency") <- freq(SERIE)                                                   # Fijar su frecuencia en base a estimacion de periocididad
+  SERIE.model <- forecast::auto.arima(SERIE, seasonal = TRUE, allowdrift = TRUE)             # Estimar modelo (clave fijar frecuencia antes!)
+  SERIE.fit <- forecast::forecast(SERIE.model, h = N, level = c(95))                         # Extraer forecasts
   #PIB <- xts(PIB, order.by = as.yearqtr(index(PIB), format = "%Y-%m-%d"))
   # Construir el objeto XTS a partir del PIB.fit (porque sino devuelve fechas mal e inusable)
   SERIE.final <- cbind(y = SERIE, y.lo = NA, y.hi = NA)                                     # agregar columnas dymmy
   SERIE.final <- rbind(SERIE.final,                                                         # pega el forecast, al que a su vez le pego fechas corregidas
                        xts::xts(cbind(y = SERIE.fit$mean, y.lo = SERIE.fit$lower, y.hi = SERIE.fit$upper),
                        timetk::tk_make_future_timeseries(timetk::tk_index(SERIE, timetk_idx = TRUE),
-                                     n_future = N ,
+                                     n_future = N,
                                      inspect_weekdays = TRUE,
                                      inspect_months = TRUE)))
   colnames(SERIE.final)[1] <- "y"
@@ -88,15 +90,14 @@ Forecast <-function(SERIE , N = 6) {
 #' @param PATTERN Pattern de búsqueda en la descripción de la serie
 #'
 #' @return Tibble con las series disponibles que con descripción coincidente
+#'
 #' @export
-#' @importFrom magrittr "%>%"
-#' @importFrom utils "download.file"
+#'
 #'
 #' @examples
 #' Listado <- List("PIB")
 List <- function(PATTERN = "*") {
-  if (is.element(difftime(Sys.time(), file.info(data_dir %+% "series-tiempo-metadatos.csv")$ctime, units = "days") > 30, T) | !file.exists(data_dir %+% "series-tiempo-metadatos.csv"))
-  {
+  if (is.element(difftime(Sys.time(), file.info(data_dir %+% "series-tiempo-metadatos.csv")$ctime, units = "days") > 30, T) | !file.exists(data_dir %+% "series-tiempo-metadatos.csv")) {
     print("Descargando archivo de metadatos, archivo no presente o descargado hace más de un mes.")
     download.file("http://infra.datos.gob.ar/catalog/modernizacion/dataset/1/distribution/1.2/download/series-tiempo-metadatos.csv", destfile = data_dir %+% "series-tiempo-metadatos.csv")
     Series <- data.table::fread(data_dir %+% "series-tiempo-metadatos.csv")
@@ -112,10 +113,9 @@ List <- function(PATTERN = "*") {
 # Para correr antes de deploy
 #devtools::document()
 
-# Cargar listado de series
-Listado_Series <- List()
-
 #devtools::use_testthat()
+#lintr::lint_package()
+
 
 # Imports
 # devtools::use_package("dplyr", type = "Imports")

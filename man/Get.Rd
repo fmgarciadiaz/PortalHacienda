@@ -17,7 +17,7 @@ Get(series, start_date = NULL, end_date = NULL)
 Un objeto XTS con la serie seleccionada en ID
 }
 \description{
-\code{Get} devuelve la serie seleccionada en ID
+\code{Get} devuelve la serie seleccionada en series = ID
 }
 \examples{
 X <- Get("138.1_PAPDE_0_M_41")

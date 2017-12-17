@@ -6,7 +6,7 @@ Author: person("Fernando", "Garcia Diaz", email = "fmgarciadiaz78@gmail.com",
                   role = c("aut", "cre"))
 Maintainer: F.García Díaz <fmgarciadiaz78@gmail.com>
 Description: Obtener listado de datos, acceder series y extender con forecasts el Portal de Datos de Hacienda.
-License: What license is it under?
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
 URL: http://yihui.name/knitr/
@@ -16,7 +16,6 @@ Imports: dplyr,
     data.table,
     lubridate,
     zoo,
-    tidyquant,
     xts,
     httr,
     tibble,
