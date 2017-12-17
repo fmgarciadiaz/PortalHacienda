@@ -2,8 +2,7 @@
 % Please edit documentation in R/FuncionesAcceso.R
 \name{Get}
 \alias{Get}
-\title{Get
-obtiene las series seleccionadas de la API del Portal de Datos}
+\title{Acceder a la API del Portal de Datos}
 \usage{
 Get(series, start_date = NULL, end_date = NULL)
 }
@@ -18,8 +17,7 @@ Get(series, start_date = NULL, end_date = NULL)
 Un objeto XTS con la serie seleccionada en ID
 }
 \description{
-Get
-obtiene las series seleccionadas de la API del Portal de Datos
+\code{Get} devuelve la serie seleccionada en ID
 }
 \examples{
 X <- Get("138.1_PAPDE_0_M_41")

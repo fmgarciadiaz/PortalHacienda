@@ -1,4 +1,7 @@
-# Libreria para Carga de Datos del Portal de Hacienda#
+# =====================================================
+# Libreria para Carga de Datos del Portal de Hacienda
+# FERGD 12-2017
+# =====================================================
 # Some useful keyboard shortcuts for package authoring:
 #
 #   Build and Reload Package:  'Cmd + Shift + B'
@@ -7,34 +10,39 @@
 
 
 
+
+
 # Mensaje de Bienvenida
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Acceso al Portal de Datos de Hacienda. FGD 2017.")
+  packageStartupMessage("Acceso al Portal de Datos de Hacienda - v0.1 - 12-2017 - fgd")
 }
 
 
+
 # Estructura de carpetas
-"%+%" <- function(x,y) paste(x,y,sep="") # se define %+% como concatenacion
-data_dir <- "/data/"
+"%+%" <- function(x, y) paste(x, y, sep = "") # se define %+% como concatenacion
+data_dir <- "data/"
 
 # Funcion de Carga de Datos desde la API y Helpers
 # Detectar periocididad para lags
-freq <- function(x) {switch(xts::periodicity(x)$scale,
-                            daily=365,
-                            weekly=52,
-                            monthly=12,
-                            quarterly=4,
-                            yearly=1)}
+freq <- function(x) {
+                      switch(xts::periodicity(x)$scale,
+                      daily = 365,
+                      weekly = 52,
+                      monthly = 12,
+                      quarterly = 4,
+                      yearly = 1)
+  }
 
-#' Get
-#' obtiene las series seleccionadas de la API del Portal de Datos
+#' Acceder a la API del Portal de Datos
+#'
+#' \code{Get} devuelve la serie seleccionada en ID
 #' @param series ID de la serie a obtener
 #' @param start_date Fecha de inicio
 #' @param end_date Fecha de final
 #'
 #' @return Un objeto XTS con la serie seleccionada en ID
 #' @export
-#'
 #' @examples
 #' X <- Get("138.1_PAPDE_0_M_41")
 Get <- function(series , start_date = NULL, end_date = NULL) {
@@ -45,7 +53,7 @@ Get <- function(series , start_date = NULL, end_date = NULL) {
                                                                       format = "csv" ,
                                                                       limit = 1000), encoding = "UTF-8")))
   serie <- xts::xts(serie[,-1], order.by = lubridate::ymd(serie$indice_tiempo) , unique = TRUE)  # Pasar a XTS
-  attr(serie, 'frequency') <- freq(serie)                                        # Fijar frecuencia de la serie en el XTS
+  #attr(serie, 'frequency') <- freq(serie)                                        # Fijar frecuencia de la serie en el XTS
   print("Cargados " %+% length(serie) %+% " datos, desde " %+% min(zoo::index(serie)) %+%
           " hasta " %+% max(zoo::index(serie)) %+% " Periodicidad: " %+% xts::periodicity(serie)$scale)
   return(serie)
@@ -58,7 +66,8 @@ Get <- function(series , start_date = NULL, end_date = NULL) {
 #'
 #' @return XTS con la serie expandida e intervalos de confianza al 95%
 #' @export
-#'
+#' @import timetk
+#' @importFrom timetk tk_make_future_timeseries
 #' @examples
 #' Forecast(Get("138.1_PAPDE_0_M_41"),12)
 Forecast <-function(SERIE , N = 6) {
@@ -70,7 +79,10 @@ Forecast <-function(SERIE , N = 6) {
   SERIE.final <- cbind(y = SERIE, y.lo = NA, y.hi = NA)                                     # agregar columnas dymmy
   SERIE.final <- rbind(SERIE.final,                                                         # pega el forecast, al que a su vez le pego fechas corregidas
                        xts::xts(cbind(y = SERIE.fit$mean, y.lo = SERIE.fit$lower, y.hi = SERIE.fit$upper),
-                       timetk::tk_make_future_timeseries(timetk::tk_index(SERIE), n_future = N)))
+                       timetk::tk_make_future_timeseries(timetk::tk_index(SERIE, timetk_idx = TRUE),
+                                                         n_future = N ,
+                                                         inspect_weekdays = TRUE,
+                                                         inspect_months = TRUE)))
   colnames(SERIE.final)[1] <- "y"
   return(SERIE.final)
 }
@@ -81,6 +93,8 @@ Forecast <-function(SERIE , N = 6) {
 #'
 #' @return Tibble con las series disponibles que con descripción coincidente
 #' @export
+#' @importFrom magrittr "%>%"
+#' @importFrom utils "download.file"
 #'
 #' @examples
 #' SeriesPIB <- List("PIB")
@@ -102,13 +116,17 @@ List <- function(PATTERN = "*") {
 # Para correr antes de deploy
 #devtools::document()
 
-# Imports
-#devtools::use_package("dplyr", type = "Imports")
-#devtools::use_package("forecast", type = "Imports")
-#devtools::use_package("timetk", type = "Imports")
-#devtools::use_package("data.table", type = "Imports")
-#devtools::use_package("lubridate", type = "Imports")
-#devtools::use_package("zoo", type = "Imports")
-#devtools::use_package("tidyquant", type = "Imports")
-#devtools::use_package("xts", type = "Imports")
+#devtools::use_testthat()
 
+# Imports
+# devtools::use_package("dplyr", type = "Imports")
+# devtools::use_package("forecast", type = "Imports")
+# devtools::use_package("timetk", type = "Imports")
+# devtools::use_package("data.table", type = "Imports")
+# devtools::use_package("lubridate", type = "Imports")
+# devtools::use_package("zoo", type = "Imports")
+# devtools::use_package("tidyquant", type = "Imports")
+# devtools::use_package("xts", type = "Imports")
+# devtools::use_package("httr", type = "Imports")
+# devtools::use_package("tibble", type = "Imports")
+# devtools::use_package("magrittr", type = "Imports")

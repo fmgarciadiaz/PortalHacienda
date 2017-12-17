@@ -17,5 +17,9 @@ Imports: dplyr,
     lubridate,
     zoo,
     tidyquant,
-    xts
+    xts,
+    httr,
+    tibble,
+    magrittr
 RoxygenNote: 6.0.1
+Suggests: testthat
