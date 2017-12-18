@@ -15,10 +15,12 @@ Imports: dplyr,
     timetk,
     data.table,
     lubridate,
-    zoo,
     xts,
     httr,
     tibble,
-    magrittr
+    magrittr,
+    nlme,
+    foreign
 RoxygenNote: 6.0.1
 Suggests: testthat
+Depends: zoo

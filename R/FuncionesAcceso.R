@@ -3,10 +3,6 @@
 # FERGD 12-2017
 # =====================================================
 
-#   Build and Reload Package:  'Cmd + Shift + B'
-#   Check Package:             'Cmd + Shift + E'
-#   Test Package:              'Cmd + Shift + T'
-
 #' @importFrom magrittr "%>%"
 #' @export
 magrittr::`%>%`
@@ -19,9 +15,9 @@ magrittr::`%>%`
 
 # Estructura de carpetas
 "%+%" <- function(x, y) paste(x, y, sep = "") # se define %+% como concatenacion
-data_dir <- "data/"
 
-# Funcion de Carga de Datos desde la API y Helpers
+
+# Helpers
 # Detectar periocididad para lags
 freq <- function(x) {
                       switch(xts::periodicity(x)$scale,
@@ -32,6 +28,7 @@ freq <- function(x) {
                       yearly = 1)
   }
 
+# ==========================================================================
 #' Acceder a la API del Portal de Datos
 #'
 #' \code{Get} devuelve la serie seleccionada en series = ID
@@ -57,14 +54,19 @@ Get <- function(series, start_date = NULL, end_date = NULL) {
   return(serie)
 }
 
-#' Forecast
+# ==========================================================================
 #' Extender series con forecast de auto.arima
+#'
 #' @param SERIE XTS a extender
+#'
 #' @param N Cantidad de períodos a extender
 #'
 #' @return XTS con la serie expandida e intervalos de confianza al 95%
+#'
 #' @export
+#'
 #' @importFrom zoo "as.Date"
+#'
 #' @examples
 #' X <- PortalHacienda::Forecast(Get("138.1_PAPDE_0_M_41"),12)
 Forecast <- function(SERIE, N = 6) {
@@ -76,7 +78,7 @@ Forecast <- function(SERIE, N = 6) {
   SERIE.final <- cbind(y = SERIE, y.lo = NA, y.hi = NA)                                     # agregar columnas dymmy
   SERIE.final <- rbind(SERIE.final,                                                         # pega el forecast, al que a su vez le pego fechas corregidas
                        xts::xts(cbind(y = SERIE.fit$mean, y.lo = SERIE.fit$lower, y.hi = SERIE.fit$upper),
-                       timetk::tk_make_future_timeseries(timetk::tk_index(SERIE, timetk_idx = TRUE),
+                       timetk::tk_make_future_timeseries(zoo::as.Date(timetk::tk_index(SERIE, timetk_idx = TRUE)),
                                      n_future = N,
                                      inspect_weekdays = TRUE,
                                      inspect_months = TRUE)))
@@ -85,45 +87,60 @@ Forecast <- function(SERIE, N = 6) {
   return(SERIE.final )
 }
 
-#' List
-#' Buscar series con el pattern deseado
+
+# ==========================================================================
+#' Buscar series en el último archivo de meta-datos descargado
+#' Busca series con el pattern deseado - descarga la serie
 #' @param PATTERN Pattern de búsqueda en la descripción de la serie
 #'
 #' @return Tibble con las series disponibles que con descripción coincidente
 #'
 #' @export
 #'
-#'
 #' @examples
-#' Listado <- List("PIB")
-List <- function(PATTERN = "*") {
-  if (is.element(difftime(Sys.time(), file.info(data_dir %+% "series-tiempo-metadatos.csv")$ctime, units = "days") > 30, T) | !file.exists(data_dir %+% "series-tiempo-metadatos.csv")) {
-    print("Descargando archivo de metadatos, archivo no presente o descargado hace más de un mes.")
-    download.file("http://infra.datos.gob.ar/catalog/modernizacion/dataset/1/distribution/1.2/download/series-tiempo-metadatos.csv", destfile = data_dir %+% "series-tiempo-metadatos.csv")
-    Series <- data.table::fread(data_dir %+% "series-tiempo-metadatos.csv")
-  } else {
-    print("Utilizando archivo de metadatos descargado hace menos de un mes.")
-    Series <- data.table::fread(data_dir %+% "series-tiempo-metadatos.csv")
-  }
-  Series <- Series %>% dplyr::filter(grepl(PATTERN, serie_descripcion, ignore.case = TRUE)) %>% tibble::as.tibble()
-  print("Encontradas " %+% length(Series$catalogo_id) %+% " serie/s.")
-  return(Series)
+#' Listado <- SeriesSearch("PIB")
+Search <- function(PATTERN = "*") {
+  return(Listado %>% dplyr::filter(grepl(PATTERN, serie_descripcion, ignore.case = TRUE)) %>%
+           tibble::as.tibble())
 }
 
+# ==========================================================================
+#' Actualizar meta-datos series
+#'
+#'@export
+#'
+#' @examples
+#' Listado_Update()
+Listado_Update <- function() {
+  Listado <- data.table::fread("http://infra.datos.gob.ar/catalog/modernizacion/dataset/1/distribution/1.2/download/series-tiempo-metadatos.csv")
+  devtools::use_data(Listado , overwrite = TRUE)
+  print("Meta-datos actualizados")
+}
+
+#' Listado de Series del Portal de Hacienda
+#'
+#' Listado completo de series. Actualizar con \code{Listado_Update()}
+#'
+#'
+#'@source \url{http://infra.datos.gob.ar/catalog/modernizacion/dataset/1/distribution/1.2/download/series-tiempo-metadatos.csv}
+"Listado"
+
 # Para correr antes de deploy
-#devtools::document()
-
-#devtools::use_testthat()
-#lintr::lint_package()
-
+# devtools::document()
+# devtools::use_testthat()
+# lintr::lint_package()
+# devtools::use_data_raw()      # Crear carpeta DATA_RAW donde van las bases en CSV y scripts de creacion
+# devtools::use_readme_rmd()
 
 # Imports
 # devtools::use_package("dplyr", type = "Imports")
 # devtools::use_package("forecast", type = "Imports")
+# devtools::use_package("nlme", type = "Imports")
+# devtools::use_package("foreign", type = "Imports")
 # devtools::use_package("timetk", type = "Imports")
 # devtools::use_package("data.table", type = "Imports")
 # devtools::use_package("lubridate", type = "Imports")
-# devtools::use_package("zoo", type = "Imports")
+# devtools::use_package("zoo", type = "Depends")
 # devtools::use_package("tidyquant", type = "Imports")
 # devtools::use_package("xts", type = "Imports")
 # devtools::use_package("httr", type = "Imports")

@@ -2,8 +2,7 @@
 % Please edit documentation in R/FuncionesAcceso.R
 \name{Forecast}
 \alias{Forecast}
-\title{Forecast
-Extender series con forecast de auto.arima}
+\title{Extender series con forecast de auto.arima}
 \usage{
 Forecast(SERIE, N = 6)
 }
@@ -16,7 +15,6 @@ Forecast(SERIE, N = 6)
 XTS con la serie expandida e intervalos de confianza al 95%
 }
 \description{
-Forecast
 Extender series con forecast de auto.arima
 }
 \examples{
