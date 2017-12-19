@@ -12,7 +12,7 @@ magrittr::`%>%`
 
 # Mensaje de Bienvenida
 .onAttach <- function(libname, pkgname) {
-  dias <- format(as.numeric(difftime(Sys.time(), LastUpdate , units = "days")) , digits = 0)
+  dias <- format(as.numeric(difftime(Sys.time(), LastUpdate, units = "days")), digits = 0)
   packageStartupMessage(
     "===========================================================================" %+% "\n" %+%
     "Acceso API Portal datos Hacienda - v 0.1 - 12-2017 por Fernando García Díaz" %+% "\n" %+%
@@ -53,8 +53,8 @@ freq <- function(x) {
 #' TCN     <- Get("174.1_T_DE_CATES_0_0_32")
 #' # Cargar serie mensual de TCN, transformada en anual y en variaciones
 #' TCN_var <- Get("174.1_T_DE_CATES_0_0_32" , start_date = 1999 , collapse = "year" , collapse_aggregation = "avg", representation_mode = "percent_change")  * 100
-Get <- function(series, start_date = NULL, end_date = NULL , representation_mode = NULL,
-                collapse = NULL , collapse_aggregation = NULL) {
+Get <- function(series, start_date = NULL, end_date = NULL, representation_mode = NULL,
+                collapse = NULL, collapse_aggregation = NULL) {
   url_base <- "http://apis.datos.gob.ar/series/api/series?"          # Cambiar URL base si cambia en la WEB
   suppressMessages(serie <- httr::content(httr::GET(url = url_base, query = list(ids = series,
                                                                       start_date = start_date,
@@ -92,7 +92,6 @@ Forecast <- function(SERIE, N = 6) {
   attr(SERIE, "frequency") <- freq(SERIE)                                                   # Fijar su frecuencia en base a estimacion de periocididad
   SERIE.model <- forecast::auto.arima(SERIE, seasonal = TRUE, allowdrift = TRUE)             # Estimar modelo (clave fijar frecuencia antes!)
   SERIE.fit <- forecast::forecast(SERIE.model, h = N, level = c(95))                         # Extraer forecasts
-  #PIB <- xts(PIB, order.by = as.yearqtr(index(PIB), format = "%Y-%m-%d"))
   # Construir el objeto XTS a partir del PIB.fit (porque sino devuelve fechas mal e inusable)
   SERIE.final <- cbind(y = SERIE, y.lo = NA, y.hi = NA)                                     # agregar columnas dymmy
   SERIE.final <- rbind(SERIE.final,                                                         # pega el forecast, al que a su vez le pego fechas corregidas

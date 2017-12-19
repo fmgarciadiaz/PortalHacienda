@@ -35,7 +35,7 @@ library(PortalHacienda)
 # Buscar las series de tipo de cambio
 Series_TCN <- Search("tipo de cambio")         
 # mostrar las primeras series encontradas
-Series_TCN <- Search_online("tipo de cambio")         
+# Series_TCN <- Search_online("tipo de cambio")         
 knitr::kable(head(Series_TCN) ,"html") %>% kableExtra::kable_styling(font_size = 7)    
 ```
 
@@ -176,7 +176,7 @@ Dinero y Bancos
 25
 </td>
 <td style="text-align:right;">
-719
+715
 </td>
 <td style="text-align:left;">
 TRUE
@@ -250,7 +250,7 @@ Dinero y Bancos
 100
 </td>
 <td style="text-align:right;">
-719
+715
 </td>
 <td style="text-align:left;">
 FALSE
@@ -324,7 +324,7 @@ Dinero y Bancos
 300
 </td>
 <td style="text-align:right;">
-719
+715
 </td>
 <td style="text-align:left;">
 FALSE
@@ -398,7 +398,7 @@ Dinero y Bancos
 20
 </td>
 <td style="text-align:right;">
-353
+349
 </td>
 <td style="text-align:left;">
 TRUE
@@ -472,7 +472,7 @@ Dinero y Bancos
 20
 </td>
 <td style="text-align:right;">
-353
+349
 </td>
 <td style="text-align:left;">
 TRUE
@@ -546,7 +546,7 @@ Dinero y Bancos
 20
 </td>
 <td style="text-align:right;">
-353
+349
 </td>
 <td style="text-align:left;">
 TRUE

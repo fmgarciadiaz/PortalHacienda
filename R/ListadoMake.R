@@ -31,5 +31,5 @@ ListadoMake <- function() {
 # Descargar Metadatos si tienen mas de un mes
 Listado <- ListadoMake()
 LastUpdate <- Sys.time()
-devtools::use_data(Listado , internal = FALSE , overwrite = TRUE)
-devtools::use_data(LastUpdate , internal = FALSE, overwrite = TRUE)
+devtools::use_data(Listado, overwrite = TRUE)
+devtools::use_data(LastUpdate, overwrite = TRUE)
