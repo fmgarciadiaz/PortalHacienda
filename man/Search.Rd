@@ -2,8 +2,8 @@
 % Please edit documentation in R/FuncionesAcceso.R
 \name{Search}
 \alias{Search}
-\title{Buscar series en el último archivo de meta-datos descargado
-Busca series con el pattern deseado - descarga la serie}
+\title{Buscar series en el archivo de meta-datos descargado con el paquete
+Si se desea utilizar la versión online más actualizada usar Search_online (sólo con conexión a internet)}
 \usage{
 Search(PATTERN = "*")
 }
@@ -14,9 +14,9 @@ Search(PATTERN = "*")
 Tibble con las series disponibles que con descripción coincidente
 }
 \description{
-Buscar series en el último archivo de meta-datos descargado
-Busca series con el pattern deseado - descarga la serie
+Buscar series en el archivo de meta-datos descargado con el paquete
+Si se desea utilizar la versión online más actualizada usar Search_online (sólo con conexión a internet)
 }
 \examples{
-Listado <- SeriesSearch("PIB")
+Listado <- Search("Tipo de Cambio")
 }

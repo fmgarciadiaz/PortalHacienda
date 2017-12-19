@@ -2,21 +2,24 @@
 % Please edit documentation in R/FuncionesAcceso.R
 \name{Forecast}
 \alias{Forecast}
-\title{Extender series con forecast de auto.arima}
+\title{Extender series con proyecciones de auto.arima (paquete Forecast)
+(Recomendado sólo para estimaciones rápidas)}
 \usage{
 Forecast(SERIE, N = 6)
 }
 \arguments{
 \item{SERIE}{XTS a extender}
 
-\item{N}{Cantidad de períodos a extender}
+\item{N}{Cantidad de períodos a extender (detecta automáticamente la frecuencia de la serie)}
 }
 \value{
 XTS con la serie expandida e intervalos de confianza al 95%
 }
 \description{
-Extender series con forecast de auto.arima
+Extender series con proyecciones de auto.arima (paquete Forecast)
+(Recomendado sólo para estimaciones rápidas)
 }
 \examples{
-X <- PortalHacienda::Forecast(Get("138.1_PAPDE_0_M_41"),12)
+# Forecast de 12 meses del tipo de cambio
+X <- PortalHacienda::Forecast(Get("174.1_T_DE_CATES_0_0_32"),12)
 }

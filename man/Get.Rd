@@ -4,7 +4,9 @@
 \alias{Get}
 \title{Acceder a la API del Portal de Datos}
 \usage{
-Get(series, start_date = NULL, end_date = NULL)
+Get(series, start_date = NULL, end_date = NULL,
+  representation_mode = NULL, collapse = NULL,
+  collapse_aggregation = NULL)
 }
 \arguments{
 \item{series}{ID de la serie a obtener}
@@ -12,13 +14,24 @@ Get(series, start_date = NULL, end_date = NULL)
 \item{start_date}{Fecha de inicio}
 
 \item{end_date}{Fecha de final}
+
+\item{collapse}{Modifica la frecuencia de muestreo de los datos de la serie}
+
+\item{collapse_aggregation}{Indica la función de agregación temporal que debe usarse para homogeneizar la frecuencia temporal de todas las series solicitadas}
+
+\item{representacion_mode}{Indica el modo de representación de las series}
 }
 \value{
 Un objeto XTS con la serie seleccionada en ID
 }
 \description{
-\code{Get} devuelve la serie seleccionada en series = ID
+\code{Get} devuelve la serie seleccionada en series = ID. Para un detalle sobre las opciones
+disponibles en parámetros consultar:
+\url{http://series-tiempo-ar-api.readthedocs.io/es/latest/api_reference/#tabla-de-parametros}
 }
 \examples{
-X <- Get("138.1_PAPDE_0_M_41")
+# Cargar serie mensual de TCN
+TCN     <- Get("174.1_T_DE_CATES_0_0_32")
+# Cargar serie mensual de TCN, transformada en anual y en variaciones
+TCN_var <- Get("174.1_T_DE_CATES_0_0_32" , start_date = 1999 , collapse = "year" , collapse_aggregation = "avg", representation_mode = "percent_change")  * 100
 }
