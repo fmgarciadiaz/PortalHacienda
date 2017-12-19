@@ -18,7 +18,7 @@ devtools::install_github("fmgarciadiaz/PortalHacienda")
 Ejemplo
 -------
 
-Búsqueda, carga y proyección básica de series del Portal.
+Búsqueda de Series en el listado incluído en el paquete o en la base online
 
 ``` r
 # Cargar el paquete
@@ -29,10 +29,13 @@ library(PortalHacienda)
 #> The following objects are masked from 'package:base':
 #> 
 #>     as.Date, as.Date.numeric
-#> Acceso al Portal de Datos de Hacienda - v0.1 - 12-2017 - fgd
+#> ===========================================================================
+#> Acceso API Portal datos Hacienda - v 0.1 - 12-2017 por Fernando García Díaz
+#> Última actualización de la base de series incluída en el paquete: 0 días
 # Buscar las series de tipo de cambio
 Series_TCN <- Search("tipo de cambio")         
 # mostrar las primeras series encontradas
+Series_TCN <- Search_online("tipo de cambio")         
 knitr::kable(head(Series_TCN) ,"html") %>% kableExtra::kable_styling(font_size = 7)    
 ```
 
@@ -173,7 +176,7 @@ Dinero y Bancos
 25
 </td>
 <td style="text-align:right;">
-715
+719
 </td>
 <td style="text-align:left;">
 TRUE
@@ -247,7 +250,7 @@ Dinero y Bancos
 100
 </td>
 <td style="text-align:right;">
-715
+719
 </td>
 <td style="text-align:left;">
 FALSE
@@ -321,7 +324,7 @@ Dinero y Bancos
 300
 </td>
 <td style="text-align:right;">
-715
+719
 </td>
 <td style="text-align:left;">
 FALSE
@@ -395,7 +398,7 @@ Dinero y Bancos
 20
 </td>
 <td style="text-align:right;">
-349
+353
 </td>
 <td style="text-align:left;">
 TRUE
@@ -469,7 +472,7 @@ Dinero y Bancos
 20
 </td>
 <td style="text-align:right;">
-349
+353
 </td>
 <td style="text-align:left;">
 TRUE
@@ -543,7 +546,7 @@ Dinero y Bancos
 20
 </td>
 <td style="text-align:right;">
-349
+353
 </td>
 <td style="text-align:left;">
 TRUE
@@ -560,13 +563,15 @@ TRUE
 </tr>
 </tbody>
 </table>
+Bajar serie con *Get* y extender 12 meses con *Forecast* (usa modelo auto-detectado del paquete "forecast"). Luego plotear.
+
 ``` r
-# Ahora bajar serie con GET y extender 12 meses con Forecast (usa modelo auto-detectado  de paquete "forecast")
+
 TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32" , start_date = 2000), 12)       
-#> [1] "Cargados 215 datos, desde 2000-01-01 hasta 2017-11-01 Periodicidad: monthly"
+#> [1] "Cargados 215 datos, desde 2000-01-01 hasta 2017-11-01 Periodicidad estimada: monthly"
 #> [1] "Serie extendida 12 períodos, usando el modelo auto detectado: ARIMA(0,2,1)(0,0,2)[12]"
 # Mostrar resultado
 plot(TCN , main = "Tipo de Cambio Nominal ($/USD)")
 ```
 
-![](README-example-1.png)
+![](README-example2-1.png)
