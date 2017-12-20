@@ -1,7 +1,8 @@
 # Generador de Listado de Metadatos
 # Correr para actualizar RDA de datos utilizado por el paquete PortalHacienda
 
-library(tidyverse)
+library(dplyr)
+library(data.table)
 
 "%+%" <- function(x, y) paste(x, y, sep = "") # se define %+% como concatenacion
 data_raw <- "data-raw/"

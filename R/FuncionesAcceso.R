@@ -42,7 +42,7 @@ freq <- function(x) {
 #' @param series ID de la serie a obtener
 #' @param start_date Fecha de inicio
 #' @param end_date Fecha de final
-#' @param representacion_mode Indica el modo de representación de las series
+#' @param representation_mode Indica el modo de representación de las series
 #' @param collapse Modifica la frecuencia de muestreo de los datos de la serie
 #' @param collapse_aggregation Indica la función de agregación temporal que debe usarse para homogeneizar la frecuencia temporal de todas las series solicitadas
 #'
@@ -52,7 +52,7 @@ freq <- function(x) {
 #' # Cargar serie mensual de TCN
 #' TCN     <- Get("174.1_T_DE_CATES_0_0_32")
 #' # Cargar serie mensual de TCN, transformada en anual y en variaciones
-#' TCN_var <- Get("174.1_T_DE_CATES_0_0_32" , start_date = 1999 , collapse = "year" , collapse_aggregation = "avg", representation_mode = "percent_change")  * 100
+#' TCN <- Get("174.1_T_DE_CATES_0_0_32", start_date = 1999, collapse = "year", collapse_aggregation = "avg", representation_mode = "percent_change")
 Get <- function(series, start_date = NULL, end_date = NULL, representation_mode = NULL,
                 collapse = NULL, collapse_aggregation = NULL) {
   url_base <- "http://apis.datos.gob.ar/series/api/series?"          # Cambiar URL base si cambia en la WEB
@@ -136,8 +136,8 @@ Search <- function(PATTERN = "*") {
 #' @export
 #'
 #' @examples
-#' Listado <- Search_online("Tipo de Cambio")
-#' Todaslasseries <- Search_online("*")
+#' #Listado <- Search_online("Tipo de Cambio")
+#' #Todaslasseries <- Search_online("*")
 Search_online <- function(PATTERN = "*") {
   Temp <- data.table::fread("http://infra.datos.gob.ar/catalog/modernizacion/dataset/1/distribution/1.2/download/series-tiempo-metadatos.csv")
   return(Temp %>% dplyr::filter(grepl(PATTERN, serie_descripcion, ignore.case = TRUE)) %>%
@@ -146,11 +146,18 @@ Search_online <- function(PATTERN = "*") {
 
 #' Listado de Series del Portal de Hacienda
 #'
-#' Listado completo de series. Actualizar con \code{Listado_Update()}
-#'
+#' Listado completo de series.
+#' uso: data(Listado)
 #'
 #'@source \url{http://infra.datos.gob.ar/catalog/modernizacion/dataset/1/distribution/1.2/download/series-tiempo-metadatos.csv}
 "Listado"
+
+#' Fecha de la última actualización de meta-datos del paquete
+#'
+#' (De los datos Listado)
+#'
+#'@source \url{http://infra.datos.gob.ar/catalog/modernizacion/dataset/1/distribution/1.2/download/series-tiempo-metadatos.csv}
+"LastUpdate"
 
 # Para correr antes de deploy
 # devtools::document()
@@ -167,8 +174,6 @@ Search_online <- function(PATTERN = "*") {
 # devtools::use_package("timetk", type = "Imports")
 # devtools::use_package("data.table", type = "Imports")
 # devtools::use_package("lubridate", type = "Imports")
-# devtools::use_package("zoo", type = "Depends")
-# devtools::use_package("tidyquant", type = "Imports")
 # devtools::use_package("xts", type = "Imports")
 # devtools::use_package("httr", type = "Imports")
 # devtools::use_package("tibble", type = "Imports")

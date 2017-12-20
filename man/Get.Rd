@@ -15,11 +15,11 @@ Get(series, start_date = NULL, end_date = NULL,
 
 \item{end_date}{Fecha de final}
 
+\item{representation_mode}{Indica el modo de representación de las series}
+
 \item{collapse}{Modifica la frecuencia de muestreo de los datos de la serie}
 
 \item{collapse_aggregation}{Indica la función de agregación temporal que debe usarse para homogeneizar la frecuencia temporal de todas las series solicitadas}
-
-\item{representacion_mode}{Indica el modo de representación de las series}
 }
 \value{
 Un objeto XTS con la serie seleccionada en ID
@@ -33,5 +33,5 @@ disponibles en parámetros consultar:
 # Cargar serie mensual de TCN
 TCN     <- Get("174.1_T_DE_CATES_0_0_32")
 # Cargar serie mensual de TCN, transformada en anual y en variaciones
-TCN_var <- Get("174.1_T_DE_CATES_0_0_32" , start_date = 1999 , collapse = "year" , collapse_aggregation = "avg", representation_mode = "percent_change")  * 100
+TCN <- Get("174.1_T_DE_CATES_0_0_32", start_date = 1999, collapse = "year", collapse_aggregation = "avg", representation_mode = "percent_change")
 }
