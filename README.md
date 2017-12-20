@@ -3,9 +3,15 @@
 
 # PortalHacienda
 
-Un paquete de interface R a la API del Portal de Datos del Ministerio de
-Hacienda. - **Buscar** - **descargar** - **proyectar** rápidamente
-series. Las series se cargan en formato XTS.
+Un paquete básico de interface R a la API del [Portal de Datos del
+Ministerio de Hacienda](https://www.minhacienda.gob.ar/datos/)
+
+  - **Buscar** series en la descripción de los meta-datos
+  - **Descargar** las series directamente de la AIP del Portal
+  - **Extender y proyectar** rápidamente series descargadas
+    (funcionalidad muy básica)
+
+Las series se cargan en formato XTS.
 
 ## Instalación
 
@@ -18,8 +24,8 @@ devtools::install_github("fmgarciadiaz/PortalHacienda")
 
 ## Ejemplo
 
-Búsqueda de Series en el listado incluído en el paquete o en la base
-online
+Búsqueda de series (a) en el listado incluído en el paquete con `Search`
+o (b) en la base online con `Search_online`.
 
 ``` r
 # Cargar el paquete
@@ -37,7 +43,7 @@ library(PortalHacienda)
 Series_TCN <- Search("tipo de cambio")         
 # mostrar las primeras series encontradas
 # Series_TCN <- Search_online("tipo de cambio")         
-knitr::kable(head(Series_TCN) ,"html") %>% kableExtra::kable_styling(font_size = 7)    
+knitr::kable(head(Series_TCN,3) ,"html") %>% kableExtra::kable_styling(font_size = 7)    
 ```
 
 <table class="table" style="font-size: 7px; margin-left: auto; margin-right: auto;">
@@ -328,13 +334,13 @@ TRUE
 
 <td style="text-align:right;">
 
-164.89815
+164.8982
 
 </td>
 
 <td style="text-align:right;">
 
-908.60646
+908.6065
 
 </td>
 
@@ -478,13 +484,13 @@ FALSE
 
 <td style="text-align:right;">
 
-935.13083
+935.1308
 
 </td>
 
 <td style="text-align:right;">
 
-884.10854
+884.1085
 
 </td>
 
@@ -628,475 +634,19 @@ FALSE
 
 <td style="text-align:right;">
 
-1040.58318
+1040.5832
 
 </td>
 
 <td style="text-align:right;">
 
-888.22200
+888.2220
 
 </td>
 
 <td style="text-align:right;">
 
 0.1715350
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-sspm
-
-</td>
-
-<td style="text-align:right;">
-
-116
-
-</td>
-
-<td style="text-align:right;">
-
-116.1
-
-</td>
-
-<td style="text-align:left;">
-
-116.1\_TCRB\_0\_A\_23
-
-</td>
-
-<td style="text-align:left;">
-
-R/P1Y
-
-</td>
-
-<td style="text-align:left;">
-
-tipo\_cambio\_real\_brasil
-
-</td>
-
-<td style="text-align:left;">
-
-Índice 17-Dic-2015=100
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Brasil: Valores anuales Índice 17 de
-Diciembre 2015=100
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral. Valores anuales. Base 2015
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral. Valores anuales. Base
-2015
-
-</td>
-
-<td style="text-align:left;">
-
-<http://infra.datos.gob.ar/catalog/sspm/dataset/116/distribution/116.1/download/indice-tipo-cambio-real-multilateral-valores-anuales-base-2015.csv>
-
-</td>
-
-<td style="text-align:left;">
-
-Subsecretaría de Programación Macroeconómica.
-
-</td>
-
-<td style="text-align:left;">
-
-Banco Central de la República Argentina (BCRA)
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral Base 17 de Diciembre de 2015
-= 100
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral Base 17 de Diciembre de 2015
-= 100
-
-</td>
-
-<td style="text-align:left;">
-
-Dinero y Bancos
-
-</td>
-
-<td style="text-align:left;">
-
-1997-01-01
-
-</td>
-
-<td style="text-align:left;">
-
-2016-01-01
-
-</td>
-
-<td style="text-align:right;">
-
-20
-
-</td>
-
-<td style="text-align:right;">
-
-349
-
-</td>
-
-<td style="text-align:left;">
-
-TRUE
-
-</td>
-
-<td style="text-align:right;">
-
-104.10892
-
-</td>
-
-<td style="text-align:right;">
-
-88.56342
-
-</td>
-
-<td style="text-align:right;">
-
-0.1755297
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-sspm
-
-</td>
-
-<td style="text-align:right;">
-
-116
-
-</td>
-
-<td style="text-align:right;">
-
-116.1
-
-</td>
-
-<td style="text-align:left;">
-
-116.1\_TCRCA\_0\_A\_23
-
-</td>
-
-<td style="text-align:left;">
-
-R/P1Y
-
-</td>
-
-<td style="text-align:left;">
-
-tipo\_cambio\_real\_canada
-
-</td>
-
-<td style="text-align:left;">
-
-Índice 17-Dic-2015=100
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Canadá: Valores anuales Índice 17 de
-Diciembre 2015=100
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral. Valores anuales. Base 2015
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral. Valores anuales. Base
-2015
-
-</td>
-
-<td style="text-align:left;">
-
-<http://infra.datos.gob.ar/catalog/sspm/dataset/116/distribution/116.1/download/indice-tipo-cambio-real-multilateral-valores-anuales-base-2015.csv>
-
-</td>
-
-<td style="text-align:left;">
-
-Subsecretaría de Programación Macroeconómica.
-
-</td>
-
-<td style="text-align:left;">
-
-Banco Central de la República Argentina (BCRA)
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral Base 17 de Diciembre de 2015
-= 100
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral Base 17 de Diciembre de 2015
-= 100
-
-</td>
-
-<td style="text-align:left;">
-
-Dinero y Bancos
-
-</td>
-
-<td style="text-align:left;">
-
-1997-01-01
-
-</td>
-
-<td style="text-align:left;">
-
-2016-01-01
-
-</td>
-
-<td style="text-align:right;">
-
-20
-
-</td>
-
-<td style="text-align:right;">
-
-349
-
-</td>
-
-<td style="text-align:left;">
-
-TRUE
-
-</td>
-
-<td style="text-align:right;">
-
-95.02524
-
-</td>
-
-<td style="text-align:right;">
-
-84.97399
-
-</td>
-
-<td style="text-align:right;">
-
-0.1182861
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-sspm
-
-</td>
-
-<td style="text-align:right;">
-
-116
-
-</td>
-
-<td style="text-align:right;">
-
-116.1
-
-</td>
-
-<td style="text-align:left;">
-
-116.1\_TCRCH\_0\_A\_22
-
-</td>
-
-<td style="text-align:left;">
-
-R/P1Y
-
-</td>
-
-<td style="text-align:left;">
-
-tipo\_cambio\_real\_china
-
-</td>
-
-<td style="text-align:left;">
-
-Índice 17-Dic-2015=100
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real China: Valores anuales Índice 17 de
-Diciembre 2015=100
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral. Valores anuales. Base 2015
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral. Valores anuales. Base
-2015
-
-</td>
-
-<td style="text-align:left;">
-
-<http://infra.datos.gob.ar/catalog/sspm/dataset/116/distribution/116.1/download/indice-tipo-cambio-real-multilateral-valores-anuales-base-2015.csv>
-
-</td>
-
-<td style="text-align:left;">
-
-Subsecretaría de Programación Macroeconómica.
-
-</td>
-
-<td style="text-align:left;">
-
-Banco Central de la República Argentina (BCRA)
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral Base 17 de Diciembre de 2015
-= 100
-
-</td>
-
-<td style="text-align:left;">
-
-Índice de Tipo de Cambio Real Multilateral Base 17 de Diciembre de 2015
-= 100
-
-</td>
-
-<td style="text-align:left;">
-
-Dinero y Bancos
-
-</td>
-
-<td style="text-align:left;">
-
-1997-01-01
-
-</td>
-
-<td style="text-align:left;">
-
-2016-01-01
-
-</td>
-
-<td style="text-align:right;">
-
-20
-
-</td>
-
-<td style="text-align:right;">
-
-349
-
-</td>
-
-<td style="text-align:left;">
-
-TRUE
-
-</td>
-
-<td style="text-align:right;">
-
-89.92900
-
-</td>
-
-<td style="text-align:right;">
-
-81.31056
-
-</td>
-
-<td style="text-align:right;">
-
-0.1059941
 
 </td>
 
@@ -1125,3 +675,4 @@ plot(TCN , main = "Tipo de Cambio Nominal ($/USD)")
 
   - \[x\] Funcionalidad básica
   - \[ \] Captura de errores de uso o en la devolución de datos
+  - \[ \] Otros
