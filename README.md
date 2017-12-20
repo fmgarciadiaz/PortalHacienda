@@ -7,23 +7,26 @@ Un paquete básico de interface R a la API del [Portal de Datos del
 Ministerio de Hacienda](https://www.minhacienda.gob.ar/datos/)
 
   - **Buscar** series en la descripción de los meta-datos
-  - **Descargar** las series directamente de la AIP del Portal
+  - **Descargar** las series directamente de la API del Portal
   - **Extender y proyectar** rápidamente series descargadas
     (funcionalidad muy básica)
 
 ## Instalación
 
-Para instalar ejecutar:
+Para instalar el paquete en R ejecutar:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("fmgarciadiaz/PortalHacienda")
 ```
 
+**Nota**: Debe instalarse previamente el paquete `devtools` para
+permitir la descarga desde `github`.
+
 ## Ejemplo
 
-Búsqueda de series (a) en el listado incluído en el paquete con `Search`
-o (b) en la base online con `Search_online`.
+Búsqueda de series **(a)** en el listado incluído en el paquete con
+`Search` o **(b)** en la base online con `Search_online`.
 
 ``` r
 # Cargar el paquete
@@ -654,9 +657,9 @@ FALSE
 
 </table>
 
-Bajar serie con `Get` y extender 12 meses con `Forecast` (usa modelo
-auto-detectado del paquete ***forecast***). Luego hacer un plot
-sencillo.
+Bajar serie con `Get` y extender 12 períodos con `Forecast` (usa modelo
+auto-detectado del paquete ***forecast*** y extiende según la frecuencia
+detectada, días, meses o años). Luego hacer un plot sencillo.
 
 ``` r
 
