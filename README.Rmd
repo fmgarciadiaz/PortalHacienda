@@ -15,7 +15,10 @@ knitr::opts_chunk$set(
 # PortalHacienda
 
 Un paquete de interface R a la API del Portal de Datos del Ministerio de Hacienda.
-Buscar, descarcar y proyectar rápidamente series. Se cargan en formato XTS.
+- **Buscar**
+- **descargar**
+- **proyectar** rápidamente series. 
+Las series se cargan en formato XTS.
 
 ## Instalación
 
@@ -40,7 +43,7 @@ Series_TCN <- Search("tipo de cambio")
 knitr::kable(head(Series_TCN) ,"html") %>% kableExtra::kable_styling(font_size = 7)    
 ```
 
-Bajar serie con *Get* y extender 12 meses con *Forecast* (usa modelo auto-detectado del paquete "forecast"). Luego plotear.
+Bajar serie con `Get` y extender 12 meses con `Forecast` (usa modelo auto-detectado del paquete ***forecast***). Luego hacer un plot sencillo.
 
 ```{r example2}
 
@@ -48,3 +51,7 @@ TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32" , start_date = 2000), 12)
 # Mostrar resultado
 plot(TCN , main = "Tipo de Cambio Nominal ($/USD)")
 ```
+
+# Estado del Proyecto
+- [x] Funcionalidad básica
+- [ ] Captura de errores de uso o en la devolución de datos
