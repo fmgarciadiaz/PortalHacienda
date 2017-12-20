@@ -20,7 +20,6 @@ Un paquete básico de interface R a la API del [Portal de Datos del Ministerio d
 - **Descargar** las series directamente de la AIP del Portal
 - **Extender y proyectar** rápidamente series descargadas (funcionalidad muy básica) 
 
-Las series se cargan en formato XTS.
 
 ## Instalación
 
@@ -48,12 +47,18 @@ knitr::kable(head(Series_TCN,3) ,"html") %>% kableExtra::kable_styling(font_size
 
 Bajar serie con `Get` y extender 12 meses con `Forecast` (usa modelo auto-detectado del paquete ***forecast***). Luego hacer un plot sencillo.
 
+
 ```{r example2}
 
 TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32" , start_date = 2000), 12)       
 # Mostrar resultado
 plot(TCN , main = "Tipo de Cambio Nominal ($/USD)")
 ```
+
+### Notas
+Las series se cargan en formato XTS, con la periodicidad auto-detectada por el paquete `xts`.
+La periocidiad es usada por la función `Forecast` para correcta detección de *estacionalidad* y *lags*.
+Las series diarias tienen un tope de **1000** datos (dado el límite actual de la API)
 
 # Estado del Proyecto
 

@@ -11,8 +11,6 @@ Ministerio de Hacienda](https://www.minhacienda.gob.ar/datos/)
   - **Extender y proyectar** rápidamente series descargadas
     (funcionalidad muy básica)
 
-Las series se cargan en formato XTS.
-
 ## Instalación
 
 Para instalar ejecutar:
@@ -670,6 +668,13 @@ plot(TCN , main = "Tipo de Cambio Nominal ($/USD)")
 ```
 
 ![](README-example2-1.png)<!-- -->
+
+### Notas
+
+Las series se cargan en formato XTS, con la periodicidad auto-detectada
+por el paquete `xts`. La periocidiad es usada por la función `Forecast`
+para correcta detección de *estacionalidad* y *lags*. Las series diarias
+tienen un tope de **1000** datos (dado el límite actual de la API)
 
 # Estado del Proyecto
 
