@@ -676,8 +676,9 @@ plot(TCN , main = "Tipo de Cambio Nominal ($/USD)")
 
 Las series se cargan en formato XTS, con la periodicidad auto-detectada
 por el paquete `xts`. La periocidiad es usada por la función `Forecast`
-para correcta detección de *estacionalidad* y *lags*. Las series diarias
-tienen un tope de **1000** datos (dado el límite actual de la API)
+para correcta detección de *estacionalidad* y *lags*. `Forecast` agrega
+demás intervalos de confianza del 95%. Las series diarias tienen un tope
+de **1000** datos (dado el límite actual de la API)
 
 # Estado del Proyecto
 
