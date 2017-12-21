@@ -37,8 +37,8 @@ library(PortalHacienda)
 #> The following objects are masked from 'package:base':
 #> 
 #>     as.Date, as.Date.numeric
-#> ===========================================================================
-#> Acceso API Portal datos Hacienda - v 0.1 - 12-2017 por Fernando García Díaz
+#> =============================================================================
+#> Acceso API Portal datos Hacienda - v 0.5.0 - 12-2017 por F. García Díaz
 #> Última actualización de la base de series incluída en el paquete: 2 días
 #> Series en la base de meta-datos: 13926
 # Buscar las series de tipo de cambio

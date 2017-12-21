@@ -6,7 +6,7 @@
 \usage{
 Get(series, start_date = NULL, end_date = NULL,
   representation_mode = NULL, collapse = NULL,
-  collapse_aggregation = NULL)
+  collapse_aggregation = NULL, limit = 1000)
 }
 \arguments{
 \item{series}{ID de la serie a obtener}
@@ -20,6 +20,8 @@ Get(series, start_date = NULL, end_date = NULL,
 \item{collapse}{Modifica la frecuencia de muestreo de los datos de la serie}
 
 \item{collapse_aggregation}{Indica la función de agregación temporal que debe usarse para homogeneizar la frecuencia temporal de todas las series solicitadas}
+
+\item{limit}{Limite de datos a obtener (máximo actual de la API 1000)}
 }
 \value{
 Un objeto XTS con la serie seleccionada en ID
