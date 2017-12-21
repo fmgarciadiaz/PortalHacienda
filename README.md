@@ -39,7 +39,8 @@ library(PortalHacienda)
 #>     as.Date, as.Date.numeric
 #> ===========================================================================
 #> Acceso API Portal datos Hacienda - v 0.1 - 12-2017 por Fernando García Díaz
-#> Última actualización de la base de series incluída en el paquete: 0 días
+#> Última actualización de la base de series incluída en el paquete: 2 días
+#> Series en la base de meta-datos: 13926
 # Buscar las series de tipo de cambio
 Series_TCN <- Search("tipo de cambio")         
 # mostrar las primeras series encontradas
@@ -657,13 +658,15 @@ FALSE
 
 </table>
 
-Bajar serie con `Get` y extender 12 períodos con `Forecast` (usa modelo
-auto-detectado del paquete ***forecast*** y extiende según la frecuencia
-detectada, días, meses o años). Luego hacer un plot sencillo.
+Bajar serie de tipo de cambio con `Get` y extender 12 períodos con
+`Forecast` (usa modelo auto-detectado del paquete ***forecast*** y
+extiende según la frecuencia detectada, días, meses o años). Luego hacer
+un plot sencillo.
 
 ``` r
 
 TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32" , start_date = 2000), 12)       
+#> [1] "Cargada/s las series: 174.1_T_DE_CATES_0_0_32. Descripción: Tipo de Cambio En $ equivalentes"
 #> [1] "Cargados 215 datos, desde 2000-01-01 hasta 2017-11-01 Periodicidad estimada: monthly"
 #> [1] "Serie extendida 12 períodos, usando el modelo auto detectado: ARIMA(0,2,1)(0,0,2)[12]"
 # Mostrar resultado
@@ -671,6 +674,17 @@ plot(TCN , main = "Tipo de Cambio Nominal ($/USD)")
 ```
 
 ![](README-example2-1.png)<!-- -->
+
+También se pueden obtener varias series al mismo tiempo, separando con
+comas…
+
+``` r
+plot(Get("6.2_AGCS_2004_T_39,6.2_IM_2004_T_23,6.2_C_2004_T_12") , legend.loc = "topleft" , main = "VAB sectorial ($ de 2004)")
+#> [1] "Cargada/s las series: c(\"6.2_AGCS_2004_T_39\", \"6.2_C_2004_T_12\", \"6.2_IM_2004_T_23\"). Descripción: c(\"Valor agregado bruto trimestral a precios de productor, de agricultura ganaderia caza y silvicultura en pesos de 2004\", \"Valor agregado bruto trimestral a precios de productor de construcción en pesos de 2004\", \"Valor agregado bruto trimestral a precios de productor de industria manufacturera en pesos de 2004\")"
+#> [1] "Cargados 162 datos, desde 2004-01-01 hasta 2017-04-01 Periodicidad estimada: quarterly"
+```
+
+![](README-example3-1.png)<!-- -->
 
 ### Notas
 

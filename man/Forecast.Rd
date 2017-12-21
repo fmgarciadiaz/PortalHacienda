@@ -21,5 +21,5 @@ Extender series con proyecciones de auto.arima (paquete Forecast)
 }
 \examples{
 # Forecast de 12 meses del tipo de cambio
-X <- PortalHacienda::Forecast(Get("174.1_T_DE_CATES_0_0_32"),12)
+TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32"),12)
 }

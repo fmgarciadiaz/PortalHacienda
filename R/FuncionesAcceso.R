@@ -14,9 +14,10 @@ magrittr::`%>%`
 .onAttach <- function(libname, pkgname) {
   dias <- format(as.numeric(difftime(Sys.time(), LastUpdate, units = "days")), digits = 0)
   packageStartupMessage(
-    "===========================================================================" %+% "\n" %+%
-    "Acceso API Portal datos Hacienda - v 0.1 - 12-2017 por Fernando García Díaz" %+% "\n" %+%
-    "Última actualización de la base de series incluída en el paquete: " %+% dias %+% " días")
+    "=============================================================================" %+% "\n" %+%
+    "Acceso API Portal datos Hacienda - v 0.5.0 - 12-2017 por F. García Díaz" %+% "\n" %+%
+    "Última actualización de la base de series incluída en el paquete: " %+% dias %+% " días" %+% "\n" %+%
+    "Series en la base de meta-datos: " %+% dim(Listado)[1] )
 }
 
 # Definicion Funciones internas helpers
@@ -55,7 +56,7 @@ freq <- function(x) {
 #' TCN <- Get("174.1_T_DE_CATES_0_0_32", start_date = 1999, collapse = "year", collapse_aggregation = "avg", representation_mode = "percent_change")
 Get <- function(series, start_date = NULL, end_date = NULL, representation_mode = NULL,
                 collapse = NULL, collapse_aggregation = NULL) {
-  url_base <- "http://apis.datos.gob.ar/series/api/series?"          # Cambiar URL base si cambia en la WEB
+  url_base <- "http://apis.datos.gob.ar/series/api/series?"                                      # Cambiar URL base si cambia en la WEB
   suppressMessages(serie <- httr::content(httr::GET(url = url_base, query = list(ids = series,
                                                                       start_date = start_date,
                                                                       end_date = end_date,
@@ -64,8 +65,11 @@ Get <- function(series, start_date = NULL, end_date = NULL, representation_mode 
                                                                       collapse_aggregation = collapse_aggregation,
                                                                       format = "csv",
                                                                       limit = 1000), encoding = "UTF-8")))
-  serie <- xts::xts(serie[, -1], order.by = lubridate::ymd(serie$indice_tiempo), unique = TRUE)  # Pasar a XTS
-  attr(serie, "frequency") <- freq(serie)                                        # Fijar frecuencia de la serie en el XTS
+  Nombres <-  Listado %>% dplyr::filter(grepl(gsub("\\," , "\\|", series),serie_id)) %>%
+    dplyr::select(serie_id, serie_descripcion)                                                   # obtener descripciones
+  serie <- xts::xts(serie[, -1], order.by = lubridate::ymd(serie$indice_tiempo), unique = TRUE , desc = Nombres[2])  # Pasar a XTS
+  attr(serie, "frequency") <- freq(serie)                                                        # Fijar frecuencia de la serie en el XTS
+  print("Cargada/s las series: " %+% Nombres[1] %+% ". Descripción: " %+% Nombres[2])
   print("Cargados " %+% length(serie) %+% " datos, desde " %+% min(zoo::index(serie)) %+%
           " hasta " %+% max(zoo::index(serie)) %+% " Periodicidad estimada: " %+% xts::periodicity(serie)$scale)
   return(serie)
@@ -87,7 +91,7 @@ Get <- function(series, start_date = NULL, end_date = NULL, representation_mode 
 #'
 #' @examples
 #' # Forecast de 12 meses del tipo de cambio
-#' X <- PortalHacienda::Forecast(Get("174.1_T_DE_CATES_0_0_32"),12)
+#' TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32"),12)
 Forecast <- function(SERIE, N = 6) {
   attr(SERIE, "frequency") <- freq(SERIE)                                                   # Fijar su frecuencia en base a estimacion de periocididad
   SERIE.model <- forecast::auto.arima(SERIE, seasonal = TRUE, allowdrift = TRUE)             # Estimar modelo (clave fijar frecuencia antes!)
@@ -158,6 +162,23 @@ Search_online <- function(PATTERN = "*") {
 #'
 #'@source \url{http://infra.datos.gob.ar/catalog/modernizacion/dataset/1/distribution/1.2/download/series-tiempo-metadatos.csv}
 "LastUpdate"
+
+
+#' PortalHacienda: Interface R a la API de datos del Ministerio de Hacienda
+#'
+#' @section PortalHacienda functions:
+#' \code{Search} busca las series en la base de meta-datos incluida (descargada del portal oficial)
+#'
+#' \code{Search_online} busca las series descargando la última versión del paquete de meta-datos (10mb aprox)
+#'
+#' \code{Get} obtiene las series desde la API
+#'
+#' \code{Forecast} extiende las series obtenidas con un modelo auto-detectado por el paquete **forecast**
+#'
+#' @docType package
+#' @name PortalHacienda
+NULL
+
 
 # Para correr antes de deploy
 # devtools::document()

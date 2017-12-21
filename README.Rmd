@@ -47,7 +47,7 @@ Series_TCN <- Search("tipo de cambio")
 knitr::kable(head(Series_TCN,3) ,"html") %>% kableExtra::kable_styling(font_size = 7)    
 ```
 
-Bajar serie con `Get` y extender 12 períodos con `Forecast` (usa modelo auto-detectado del paquete ***forecast*** y extiende según la frecuencia detectada, días, meses o años). 
+Bajar serie de tipo de cambio con `Get` y extender 12 períodos con `Forecast` (usa modelo auto-detectado del paquete ***forecast*** y extiende según la frecuencia detectada, días, meses o años). 
 Luego hacer un plot sencillo.
 
 
@@ -57,6 +57,13 @@ TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32" , start_date = 2000), 12)
 # Mostrar resultado
 plot(TCN , main = "Tipo de Cambio Nominal ($/USD)")
 ```
+
+También se pueden obtener varias series al mismo tiempo, separando con comas...
+
+```{r example3}
+plot(Get("6.2_AGCS_2004_T_39,6.2_IM_2004_T_23,6.2_C_2004_T_12") , legend.loc = "topleft" , main = "VAB sectorial ($ de 2004)")
+```
+
 
 ### Notas
 Las series se cargan en formato XTS, con la periodicidad auto-detectada por el paquete `xts`.
