@@ -3,7 +3,7 @@
 
 # PortalHacienda
 
-Un paquete básico de interface R a la API del [Portal de Datos del
+Un paquete básico de interfase a la API del [Portal de Datos del
 Ministerio de Hacienda](https://www.minhacienda.gob.ar/datos/)
 
   - **Buscar** series en la descripción de los meta-datos
