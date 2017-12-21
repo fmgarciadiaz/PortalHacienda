@@ -117,15 +117,22 @@ Forecast <- function(SERIE, N = 6) {
 #'
 #' @param PATTERN Pattern de búsqueda en la descripción de la serie
 #'
+#' @param METADATA Devuelve todos los datos de las series si es TRUE. Sino devuelve solo
+#' una selección de datos más usados.
+#'
 #' @return Tibble con las series disponibles que con descripción coincidente
 #'
 #' @export
 #'
 #' @examples
 #' Listado <- Search("Tipo de Cambio")
-Search <- function(PATTERN = "*") {
+Search <- function(PATTERN = "*" , METADATA = FALSE) {
+  if (METADATA == TRUE) {
   return(Listado %>% dplyr::filter(grepl(PATTERN, serie_descripcion, ignore.case = TRUE)) %>%
-           tibble::as.tibble())
+           tibble::as.tibble())} else {
+  return(Listado %>% dplyr::filter(grepl(PATTERN, serie_descripcion, ignore.case = TRUE)) %>%
+           dplyr::select(serie_id, serie_descripcion, indice_tiempo_frecuencia, serie_indice_inicio, serie_indice_final) %>%
+           tibble::as.tibble())}
 }
 
 

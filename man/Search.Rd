@@ -5,10 +5,13 @@
 \title{Buscar series en el archivo de meta-datos descargado con el paquete
 Si se desea utilizar la versión online más actualizada usar Search_online (sólo con conexión a internet)}
 \usage{
-Search(PATTERN = "*")
+Search(PATTERN = "*", METADATA = FALSE)
 }
 \arguments{
 \item{PATTERN}{Pattern de búsqueda en la descripción de la serie}
+
+\item{METADATA}{Devuelve todos los datos de las series si es TRUE. Sino devuelve solo
+una selección de datos más usados.}
 }
 \value{
 Tibble con las series disponibles que con descripción coincidente
