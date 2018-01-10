@@ -2,8 +2,7 @@
 % Please edit documentation in R/FuncionesAcceso.R
 \name{Search}
 \alias{Search}
-\title{Buscar series en el archivo de meta-datos descargado con el paquete
-Si se desea utilizar la versión online más actualizada usar Search_online (sólo con conexión a internet)}
+\title{Buscar series en el archivo de meta-datos descargado con el paquete}
 \usage{
 Search(PATTERN = "*", METADATA = FALSE)
 }
@@ -17,7 +16,6 @@ una selección de datos más usados.}
 Tibble con las series disponibles que con descripción coincidente
 }
 \description{
-Buscar series en el archivo de meta-datos descargado con el paquete
 Si se desea utilizar la versión online más actualizada usar Search_online (sólo con conexión a internet)
 }
 \examples{

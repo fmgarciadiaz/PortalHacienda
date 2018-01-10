@@ -78,13 +78,16 @@ Get <- function(series, start_date = NULL, end_date = NULL, representation_mode 
 
 # ==========================================================================
 #' Extender series con proyecciones de auto.arima (paquete Forecast)
-#' (Recomendado sólo para estimaciones rápidas)
+#'
+#' Recomendado sólo para estimaciones rápidas.\code{Forecast} sólo acepta XTS con una única serie de tiempo. Para múltiples series usar \code{vForecast}
 #'
 #' @param SERIE XTS a extender
 #'
 #' @param N Cantidad de períodos a extender (detecta automáticamente la frecuencia de la serie)
 #'
-#' @return XTS con la serie expandida e intervalos de confianza al 95%
+#' @param confidence Vector de intervalos de confianza a agregar en la salida (i.e. c(95)) o FALSE sin intervalos
+#'
+#' @return XTS con la serie expandida e intervalos de confianza al % seleccionado en level
 #'
 #' @export
 #'
@@ -92,27 +95,81 @@ Get <- function(series, start_date = NULL, end_date = NULL, representation_mode 
 #'
 #' @examples
 #' # Forecast de 12 meses del tipo de cambio
-#' TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32"),12)
-Forecast <- function(SERIE, N = 6) {
+#' TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32"), N = 12 , confidence = c(80))
+Forecast <- function(SERIE, N = 6 , confidence = c(80)) {
+  if (confidence == FALSE)
+    level <- c(95)
+  else
+    level <- confidence
   attr(SERIE, "frequency") <- freq(SERIE)                                                   # Fijar su frecuencia en base a estimacion de periocididad
   SERIE.model <- forecast::auto.arima(SERIE, seasonal = TRUE, allowdrift = TRUE)             # Estimar modelo (clave fijar frecuencia antes!)
-  SERIE.fit <- forecast::forecast(SERIE.model, h = N, level = c(95))                         # Extraer forecasts
+  SERIE.fit <- forecast::forecast(SERIE.model, h = N, level = level)                         # Extraer forecasts
   # Construir el objeto XTS a partir del PIB.fit (porque sino devuelve fechas mal e inusable)
-  SERIE.final <- cbind(y = SERIE, y.lo = NA, y.hi = NA)                                     # agregar columnas dymmy
-  SERIE.final <- rbind(SERIE.final,                                                         # pega el forecast, al que a su vez le pego fechas corregidas
-                       xts::xts(cbind(y = SERIE.fit$mean, y.lo = SERIE.fit$lower, y.hi = SERIE.fit$upper),
-                       timetk::tk_make_future_timeseries(zoo::as.Date(timetk::tk_index(SERIE, timetk_idx = TRUE)),
-                                     n_future = N,
-                                     inspect_weekdays = TRUE,
-                                     inspect_months = TRUE)))
+  if (confidence == FALSE) {
+    SERIE.final <- cbind(y = SERIE)                                                           # sin intervalos de confianza
+    SERIE.final <- rbind(SERIE.final,                                                         # pega el forecast, al que a su vez le pego fechas corregidas
+                         xts::xts(cbind(y = SERIE.fit$mean),
+                          timetk::tk_make_future_timeseries(zoo::as.Date(timetk::tk_index(SERIE, timetk_idx = TRUE)),
+                                                                    n_future = N,
+                                                                    inspect_weekdays = TRUE,
+                                                                    inspect_months = TRUE)))
+    }
+    else {
+    SERIE.final <- cbind(y = SERIE, y.lo = NA, y.hi = NA)                                     # agregar columnas dymmy
+    SERIE.final <- rbind(SERIE.final,                                                         # pega el forecast, al que a su vez le pego fechas corregidas
+                         xts::xts(cbind(y = SERIE.fit$mean, y.lo = SERIE.fit$lower, y.hi = SERIE.fit$upper),
+                           timetk::tk_make_future_timeseries(zoo::as.Date(timetk::tk_index(SERIE, timetk_idx = TRUE)),
+                                                                    n_future = N,
+                                                                    inspect_weekdays = TRUE,
+                                                                    inspect_months = TRUE)))
+    }
   colnames(SERIE.final)[1] <- "y"
   print("Serie extendida " %+% N %+% " períodos, usando el modelo auto detectado: " %+% SERIE.model)
   return(SERIE.final )
 }
 
+# ==========================================================================
+#' Extender series con proyecciones de auto.arima (paquete Forecast)
+#'
+#' Recomendado sólo para estimaciones rápidas. A diferencia de \code{Forecast}, no devuelve intervalos de confianza, pero acepta
+#' como input un XTS con múltiples series de tiempo.
+#'
+#' @param SERIE XTS a extender
+#'
+#' @param N Cantidad de períodos a extender (detecta automáticamente la frecuencia de la serie)
+#'
+#' @return XTS con la series expandidas, acepta xts con muchas series
+#'
+#' @export
+#'
+#' @importFrom zoo "as.Date"
+#'
+#' @examples
+#' # Forecast de 12 meses del tipo de cambio
+#' TCN <- vForecast(Get("120.1_PCE_1993_0_24,120.1_ED1_1993_0_26"),12)
+vForecast <- function(SERIE, N = 6) {
+  attr(SERIE, "frequency") <- freq(SERIE)                                                    # Fijar su frecuencia en base a estimacion de periocididad
+  SERIE.fit <- lapply(SERIE, function(x) forecast(auto.arima(x, seasonal = TRUE, allowdrift = TRUE), h = N)$mean)
+  SERIE.fit <- data.frame(do.call(cbind, SERIE.fit))
+  # Construir el objeto XTS a partir del PIB.fit (porque sino devuelve fechas mal e inusable)
+  SERIE.final <- cbind(y = SERIE)                                                           # sin intervalos de confianza
+  SERIE.final <- rbind(SERIE.final,                                                         # pega el forecast, al que a su vez le pego fechas corregidas
+                       xts::xts(SERIE.fit,
+                                timetk::tk_make_future_timeseries(zoo::as.Date(timetk::tk_index(SERIE, timetk_idx = TRUE)),
+                                        n_future = N,
+                                        inspect_weekdays = TRUE,
+                                        inspect_months = TRUE)))
+  print("Serie extendida " %+% N %+% " períodos, usando modelo auto detectado")
+  return(SERIE.final )
+}
+
+
+
+
 
 # ==========================================================================
 #' Buscar series en el archivo de meta-datos descargado con el paquete
+#'
 #' Si se desea utilizar la versión online más actualizada usar Search_online (sólo con conexión a internet)
 #'
 #' @param PATTERN Pattern de búsqueda en la descripción de la serie
