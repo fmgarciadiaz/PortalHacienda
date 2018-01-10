@@ -149,7 +149,8 @@ Forecast <- function(SERIE, N = 6 , confidence = c(80)) {
 #' TCN <- vForecast(Get("120.1_PCE_1993_0_24,120.1_ED1_1993_0_26"),12)
 vForecast <- function(SERIE, N = 6) {
   attr(SERIE, "frequency") <- freq(SERIE)                                                    # Fijar su frecuencia en base a estimacion de periocididad
-  SERIE.fit <- lapply(SERIE, function(x) forecast(auto.arima(x, seasonal = TRUE, allowdrift = TRUE), h = N)$mean)
+  SERIE.fit <- lapply(SERIE, function(x) forecast::forecast(forecast::auto.arima(x,
+                                   seasonal = TRUE, allowdrift = TRUE), h = N)$mean)
   SERIE.fit <- data.frame(do.call(cbind, SERIE.fit))
   # Construir el objeto XTS a partir del PIB.fit (porque sino devuelve fechas mal e inusable)
   SERIE.final <- cbind(y = SERIE)                                                           # sin intervalos de confianza
@@ -162,9 +163,6 @@ vForecast <- function(SERIE, N = 6) {
   print("Serie extendida " %+% N %+% " períodos, usando modelo auto detectado")
   return(SERIE.final )
 }
-
-
-
 
 
 # ==========================================================================
