@@ -87,6 +87,8 @@ Get <- function(series, start_date = NULL, end_date = NULL, representation_mode 
 #'
 #' @param confidence Vector de intervalos de confianza a agregar en la salida (i.e. c(95)) o FALSE sin intervalos
 #'
+#' @param ... otros parámetros para \code{auto.arima}
+#'
 #' @return XTS con la serie expandida e intervalos de confianza al % seleccionado en level
 #'
 #' @export
@@ -96,13 +98,13 @@ Get <- function(series, start_date = NULL, end_date = NULL, representation_mode 
 #' @examples
 #' # Forecast de 12 meses del tipo de cambio
 #' TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32"), N = 12 , confidence = c(80))
-Forecast <- function(SERIE, N = 6 , confidence = c(80)) {
+Forecast <- function(SERIE, N = 6 , confidence = c(80), ...) {
   if (confidence == FALSE)
     level <- c(95)
   else
     level <- confidence
-  attr(SERIE, "frequency") <- freq(SERIE)                                                   # Fijar su frecuencia en base a estimacion de periocididad
-  SERIE.model <- forecast::auto.arima(SERIE, seasonal = TRUE, allowdrift = TRUE)             # Estimar modelo (clave fijar frecuencia antes!)
+  attr(SERIE, "frequency") <- freq(SERIE)                                                    # Fijar su frecuencia en base a estimacion de periocididad
+  SERIE.model <- forecast::auto.arima(SERIE, seasonal = TRUE, allowdrift = TRUE, ...)        # Estimar modelo (clave fijar frecuencia antes!)
   SERIE.fit <- forecast::forecast(SERIE.model, h = N, level = level)                         # Extraer forecasts
   # Construir el objeto XTS a partir del PIB.fit (porque sino devuelve fechas mal e inusable)
   if (confidence == FALSE) {
@@ -138,6 +140,8 @@ Forecast <- function(SERIE, N = 6 , confidence = c(80)) {
 #'
 #' @param N Cantidad de períodos a extender (detecta automáticamente la frecuencia de la serie)
 #'
+#' @param ... Otros parámetros para \code{auto.arima}
+#'
 #' @return XTS con la series expandidas, acepta xts con muchas series
 #'
 #' @export
@@ -147,10 +151,10 @@ Forecast <- function(SERIE, N = 6 , confidence = c(80)) {
 #' @examples
 #' # Forecast de 12 meses del tipo de cambio
 #' TCN <- vForecast(Get("120.1_PCE_1993_0_24,120.1_ED1_1993_0_26"),12)
-vForecast <- function(SERIE, N = 6) {
+vForecast <- function(SERIE, N = 6, ...) {
   attr(SERIE, "frequency") <- freq(SERIE)                                                    # Fijar su frecuencia en base a estimacion de periocididad
   SERIE.fit <- lapply(SERIE, function(x) forecast::forecast(forecast::auto.arima(x,
-                                   seasonal = TRUE, allowdrift = TRUE), h = N)$mean)
+                                   seasonal = TRUE, allowdrift = TRUE, ...), h = N)$mean)
   SERIE.fit <- data.frame(do.call(cbind, SERIE.fit))
   # Construir el objeto XTS a partir del PIB.fit (porque sino devuelve fechas mal e inusable)
   SERIE.final <- cbind(y = SERIE)                                                           # sin intervalos de confianza

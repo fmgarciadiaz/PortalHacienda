@@ -4,7 +4,7 @@
 \alias{Forecast}
 \title{Extender series con proyecciones de auto.arima (paquete Forecast)}
 \usage{
-Forecast(SERIE, N = 6, confidence = c(80))
+Forecast(SERIE, N = 6, confidence = c(80), ...)
 }
 \arguments{
 \item{SERIE}{XTS a extender}
@@ -12,6 +12,8 @@ Forecast(SERIE, N = 6, confidence = c(80))
 \item{N}{Cantidad de períodos a extender (detecta automáticamente la frecuencia de la serie)}
 
 \item{confidence}{Vector de intervalos de confianza a agregar en la salida (i.e. c(95)) o FALSE sin intervalos}
+
+\item{...}{otros parámetros para \code{auto.arima}}
 }
 \value{
 XTS con la serie expandida e intervalos de confianza al % seleccionado en level

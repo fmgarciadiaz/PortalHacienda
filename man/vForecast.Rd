@@ -4,12 +4,14 @@
 \alias{vForecast}
 \title{Extender series con proyecciones de auto.arima (paquete Forecast)}
 \usage{
-vForecast(SERIE, N = 6)
+vForecast(SERIE, N = 6, ...)
 }
 \arguments{
 \item{SERIE}{XTS a extender}
 
 \item{N}{Cantidad de períodos a extender (detecta automáticamente la frecuencia de la serie)}
+
+\item{...}{Otros parámetros para \code{auto.arima}}
 }
 \value{
 XTS con la series expandidas, acepta xts con muchas series
