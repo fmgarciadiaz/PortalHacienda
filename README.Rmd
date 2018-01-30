@@ -64,6 +64,11 @@ También se pueden obtener varias series al mismo tiempo, separando con comas...
 plot(Get("6.2_AGCS_2004_T_39,6.2_IM_2004_T_23,6.2_C_2004_T_12") , legend.loc = "topleft" , main = "VAB sectorial ($ de 2004)")
 ```
 
+En caso de cargar varias series y desear proyecciones automáticas, utilizar la
+variante vectorial de `Forecast`, que es `vForecast`.
+```{r example3}
+TCN <- vForecast(Get("120.1_PCE_1993_0_24,120.1_ED1_1993_0_26"),12)
+```
 
 ### Notas
 Las series se cargan en formato XTS, con la periodicidad auto-detectada por el paquete `xts`.

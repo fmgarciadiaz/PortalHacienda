@@ -56,7 +56,7 @@ freq <- function(x) {
 #' # Cargar serie mensual de TCN, transformada en anual y en variaciones
 #' TCN <- Get("174.1_T_DE_CATES_0_0_32", start_date = 1999, collapse = "year", collapse_aggregation = "avg", representation_mode = "percent_change")
 Get <- function(series, start_date = NULL, end_date = NULL, representation_mode = NULL,
-                collapse = NULL, collapse_aggregation = NULL , limit = 1000) {
+                collapse = NULL, collapse_aggregation = NULL, limit = 1000) {
   url_base <- "http://apis.datos.gob.ar/series/api/series?"                                      # Cambiar URL base si cambia en la WEB
   suppressMessages(serie <- httr::content(httr::GET(url = url_base, query = list(ids = series,
                                                                       start_date = start_date,
@@ -66,9 +66,9 @@ Get <- function(series, start_date = NULL, end_date = NULL, representation_mode 
                                                                       collapse_aggregation = collapse_aggregation,
                                                                       format = "csv",
                                                                       limit = limit), encoding = "UTF-8")))
-  Nombres <-  Listado %>% dplyr::filter(grepl(gsub("\\," , "\\|", series),serie_id)) %>%
+  Nombres <-  Listado %>% dplyr::filter(grepl(gsub("\\,", "\\|", series), serie_id)) %>%
     dplyr::select(serie_id, serie_descripcion)                                                   # obtener descripciones
-  serie <- xts::xts(serie[, -1], order.by = lubridate::ymd(serie$indice_tiempo), unique = TRUE , desc = Nombres[2])  # Pasar a XTS
+  serie <- xts::xts(serie[, -1], order.by = lubridate::ymd(serie$indice_tiempo), unique = TRUE, desc = Nombres[2])  # Pasar a XTS
   attr(serie, "frequency") <- freq(serie)                                                        # Fijar frecuencia de la serie en el XTS
   print("Cargada/s las series: " %+% Nombres[1] %+% ". Descripción: " %+% Nombres[2])
   print("Cargados " %+% length(serie) %+% " datos, desde " %+% min(zoo::index(serie)) %+%
@@ -98,7 +98,7 @@ Get <- function(series, start_date = NULL, end_date = NULL, representation_mode 
 #' @examples
 #' # Forecast de 12 meses del tipo de cambio
 #' TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32"), N = 12 , confidence = c(80))
-Forecast <- function(SERIE, N = 6 , confidence = c(80), ...) {
+Forecast <- function(SERIE, N = 6, confidence = c(80), ...) {
   if (confidence == FALSE)
     level <- c(95)
   else
@@ -185,13 +185,14 @@ vForecast <- function(SERIE, N = 6, ...) {
 #'
 #' @examples
 #' Listado <- Search("Tipo de Cambio")
-Search <- function(PATTERN = "*" , METADATA = FALSE) {
+Search <- function(PATTERN = "*", METADATA = FALSE) {
   if (METADATA == TRUE) {
   return(Listado %>% dplyr::filter(grepl(PATTERN, serie_descripcion, ignore.case = TRUE)) %>%
            tibble::as.tibble())} else {
   return(Listado %>% dplyr::filter(grepl(PATTERN, serie_descripcion, ignore.case = TRUE)) %>%
            dplyr::select(serie_id, serie_descripcion, indice_tiempo_frecuencia, serie_indice_inicio, serie_indice_final) %>%
-           tibble::as.tibble())}
+           tibble::as.tibble())
+             }
 }
 
 
