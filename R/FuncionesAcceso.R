@@ -59,17 +59,19 @@ freq <- function(x) {
 Get <- function(series, start_date = NULL, end_date = NULL, representation_mode = NULL,
                 collapse = NULL, collapse_aggregation = NULL, limit = 1000, timeout = 0.2) {
   url_base <- "http://apis.datos.gob.ar/series/api/series?"                                      # Cambiar URL base si cambia en la WEB
-  suppressMessages(serie <- httr::content(httr::GET(url = url_base, query = list(ids = series,
+  GETSAFE <- purrr::safely(httr::GET)   # enmarco en purrr para manejo de errores
+  suppressMessages(serie <- GETSAFE(url = url_base, query = list(ids = series,
                                                                       start_date = start_date,
                                                                       end_date = end_date,
                                                                       representation_mode = representation_mode,
                                                                       collapse = collapse,
                                                                       collapse_aggregation = collapse_aggregation,
                                                                       format = "csv",
-                                                                      limit = limit), encoding = "UTF-8",
-                                                                      httr::timeout(timeout))
-                                                                      ))
-  if ("errors" %in% names(serie)) print("Error en la carga > " %+% serie$errors[[1]][[1]])
+                                                                      limit = limit),
+                                                                      httr::timeout(timeout)))
+  if (is.null(serie$result)) stop("Error general, por favor verificar conexión.")
+  suppressMessages(serie <- httr::content(serie$result , encoding = "UTF-8"))
+  if ("errors" %in% names(serie)) stop("Error en la carga > " %+% serie$errors[[1]][[1]])
   Nombres <-  Listado %>% dplyr::filter(grepl(gsub("\\,", "\\|", series), serie_id)) %>%
     dplyr::select(serie_id, serie_descripcion)                                                   # obtener descripciones
   serie <- xts::xts(serie[, -1], order.by = lubridate::ymd(serie$indice_tiempo), unique = TRUE, desc = Nombres[2])  # Pasar a XTS

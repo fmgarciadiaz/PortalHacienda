@@ -38,9 +38,9 @@ library(PortalHacienda)
 #> 
 #>     as.Date, as.Date.numeric
 #> =============================================================================
-#> Acceso API Portal Datos Hacienda - v 0.5.0 - 12-2017 por F. García Díaz
+#> Acceso API Portal Datos Hacienda - v 0.5.1 - 12-2017 por F. García Díaz
 #> Última actualización de la base de series incluída en el paquete: 0 días
-#> Series en la base de meta-datos: 14341
+#> Series en la base de meta-datos: 18308
 # Buscar las series de tipo de cambio
 Series_TCN <- Search("tipo de cambio")         
 # mostrar las primeras series encontradas
@@ -208,7 +208,7 @@ un plot sencillo.
 
 TCN <- Forecast(Get("174.1_T_DE_CATES_0_0_32" , start_date = 2000), 12)       
 #> [1] "Cargada/s las series: 174.1_T_DE_CATES_0_0_32. Descripción: Tipo de Cambio En $ equivalentes"
-#> [1] "Cargados 215 datos, desde 2000-01-01 hasta 2017-11-01 Periodicidad estimada: monthly"
+#> [1] "Cargados 218 datos, desde 2000-01-01 hasta 2018-02-01 Periodicidad estimada: monthly"
 #> [1] "Serie extendida 12 períodos, usando el modelo auto detectado: ARIMA(0,2,1)(0,0,2)[12]"
 # Mostrar resultado
 plot(TCN , main = "Tipo de Cambio Nominal ($/USD)")
@@ -222,7 +222,7 @@ comas…
 ``` r
 plot(Get("6.2_AGCS_2004_T_39,6.2_IM_2004_T_23,6.2_C_2004_T_12") , legend.loc = "topleft" , main = "VAB sectorial ($ de 2004)")
 #> [1] "Cargada/s las series: c(\"6.2_AGCS_2004_T_39\", \"6.2_C_2004_T_12\", \"6.2_IM_2004_T_23\"). Descripción: c(\"Valor agregado bruto trimestral a precios de productor, de agricultura ganaderia caza y silvicultura en pesos de 2004\", \"Valor agregado bruto trimestral a precios de productor de construcción en pesos de 2004\", \"Valor agregado bruto trimestral a precios de productor de industria manufacturera en pesos de 2004\")"
-#> [1] "Cargados 165 datos, desde 2004-01-01 hasta 2017-07-01 Periodicidad estimada: quarterly"
+#> [1] "Cargados 168 datos, desde 2004-01-01 hasta 2017-10-01 Periodicidad estimada: quarterly"
 ```
 
 ![](README-example3-1.png)<!-- -->
@@ -233,7 +233,7 @@ utilizar la variante vectorial de `Forecast`, que es `vForecast`:
 ``` r
 TCN <- vForecast(Get("120.1_PCE_1993_0_24,120.1_ED1_1993_0_26"),12)
 #> [1] "Cargada/s las series: c(\"120.1_ED1_1993_0_26\", \"120.1_PCE_1993_0_24\"). Descripción: c(\"Exportaciones de bienes en millones de dólares de 1993\", \"Poder de compra de las exportaciones de bienes en millones de dólares de 1993\")"
-#> [1] "Cargados 62 datos, desde 1986-01-01 hasta 2016-01-01 Periodicidad estimada: yearly"
+#> [1] "Cargados 64 datos, desde 1986-01-01 hasta 2017-01-01 Periodicidad estimada: yearly"
 #> [1] "Serie extendida 12 períodos, usando modelo auto detectado"
 ```
 
@@ -248,5 +248,6 @@ de **1000** datos (dado el límite actual de la API)
 # Estado del Proyecto
 
   - \[x\] Funcionalidad básica
-  - \[ \] Captura de errores de uso o en la devolución de datos
+  - \[x\] Captura de errores de uso o en la devolución de datos (básico)
+  - \[ \] Captura de errores avanzada
   - \[ \] Otros
