@@ -15,7 +15,7 @@ magrittr::`%>%`
   dias <- format(as.numeric(difftime(Sys.time(), LastUpdate, units = "days")), digits = 0)
   packageStartupMessage(
     "=============================================================================" %+% "\n" %+%
-    "Acceso API Portal Datos Hacienda - v 0.5.0 - 12-2017 por F. García Díaz" %+% "\n" %+%
+    "Acceso API Portal Datos Hacienda - v 0.5.1 - 12-2017 por F. García Díaz" %+% "\n" %+%
     "Última actualización de la base de series incluída en el paquete: " %+% dias %+% " días" %+% "\n" %+%
     "Series en la base de meta-datos: " %+% dim(Listado)[1] )
 }
