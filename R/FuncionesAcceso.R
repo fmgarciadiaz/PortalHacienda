@@ -47,6 +47,7 @@ freq <- function(x) {
 #' @param collapse Modifica la frecuencia de muestreo de los datos de la serie
 #' @param collapse_aggregation Indica la función de agregación temporal que debe usarse para homogeneizar la frecuencia temporal de todas las series solicitadas
 #' @param limit Limite de datos a obtener (máximo actual de la API 1000)
+#' @param timeout Timeout para la conección a la API de datos
 #'
 #' @return Un objeto XTS con la serie seleccionada en ID
 #' @export
@@ -56,7 +57,7 @@ freq <- function(x) {
 #' # Cargar serie mensual de TCN, transformada en anual y en variaciones
 #' TCN <- Get("174.1_T_DE_CATES_0_0_32", start_date = 1999, collapse = "year", collapse_aggregation = "avg", representation_mode = "percent_change")
 Get <- function(series, start_date = NULL, end_date = NULL, representation_mode = NULL,
-                collapse = NULL, collapse_aggregation = NULL, limit = 1000) {
+                collapse = NULL, collapse_aggregation = NULL, limit = 1000, timeout = 0.2) {
   url_base <- "http://apis.datos.gob.ar/series/api/series?"                                      # Cambiar URL base si cambia en la WEB
   suppressMessages(serie <- httr::content(httr::GET(url = url_base, query = list(ids = series,
                                                                       start_date = start_date,
@@ -65,7 +66,10 @@ Get <- function(series, start_date = NULL, end_date = NULL, representation_mode 
                                                                       collapse = collapse,
                                                                       collapse_aggregation = collapse_aggregation,
                                                                       format = "csv",
-                                                                      limit = limit), encoding = "UTF-8")))
+                                                                      limit = limit), encoding = "UTF-8",
+                                                                      httr::timeout(timeout))
+                                                                      ))
+  if ("errors" %in% names(serie)) print("Error en la carga > " %+% serie$errors[[1]][[1]])
   Nombres <-  Listado %>% dplyr::filter(grepl(gsub("\\,", "\\|", series), serie_id)) %>%
     dplyr::select(serie_id, serie_descripcion)                                                   # obtener descripciones
   serie <- xts::xts(serie[, -1], order.by = lubridate::ymd(serie$indice_tiempo), unique = TRUE, desc = Nombres[2])  # Pasar a XTS
