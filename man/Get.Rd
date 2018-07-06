@@ -6,7 +6,7 @@
 \usage{
 Get(series, start_date = NULL, end_date = NULL,
   representation_mode = NULL, collapse = NULL,
-  collapse_aggregation = NULL, limit = 1000, timeout = 0.2)
+  collapse_aggregation = NULL, limit = 1000, timeout = 0.4)
 }
 \arguments{
 \item{series}{ID de la serie a obtener}

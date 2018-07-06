@@ -57,7 +57,7 @@ freq <- function(x) {
 #' # Cargar serie mensual de TCN, transformada en anual y en variaciones
 #' TCN <- Get("174.1_T_DE_CATES_0_0_32", start_date = 1999, collapse = "year", collapse_aggregation = "avg", representation_mode = "percent_change")
 Get <- function(series, start_date = NULL, end_date = NULL, representation_mode = NULL,
-                collapse = NULL, collapse_aggregation = NULL, limit = 1000, timeout = 0.2) {
+                collapse = NULL, collapse_aggregation = NULL, limit = 1000, timeout = 0.4) {
   url_base <- "http://apis.datos.gob.ar/series/api/series?"                                      # Cambiar URL base si cambia en la WEB
   GETSAFE <- purrr::safely(httr::GET)   # enmarco en purrr para manejo de errores
   suppressMessages(serie <- GETSAFE(url = url_base, query = list(ids = series,

@@ -4,7 +4,7 @@
 \name{Listado}
 \alias{Listado}
 \title{Listado de Series del Portal de Hacienda}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 18308 rows and 24 columns.}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 20205 rows and 24 columns.}
 \source{
 \url{http://infra.datos.gob.ar/catalog/modernizacion/dataset/1/distribution/1.2/download/series-tiempo-metadatos.csv}
 }
