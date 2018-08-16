@@ -1,6 +1,6 @@
 # ==============================================================================
 # Libreria para Carga de Datos del Portal de Hacienda
-# Buscar, descargar y proyectar rápidamente series.
+# Buscar, descargar y proyectar rápidamente series..
 # FERGD 12-2017
 # 08-18: Actualizacion de series. Incremento del timeout default para evitar problemas recurrentes
 # ==============================================================================
