@@ -276,3 +276,4 @@ NULL
 # devtools::use_package("httr", type = "Imports")
 # devtools::use_package("tibble", type = "Imports")
 # devtools::use_package("magrittr", type = "Imports")
+# rmarkdown::render("README.Rmd")
