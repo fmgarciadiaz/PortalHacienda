@@ -24,7 +24,7 @@ ListadoMake <- function() {
     print("Utilizando archivo de metadatos descargado hace menos de un mes.")
     Series <- data.table::fread(data_raw %+% "series-tiempo-metadatos.csv")
   }
-  Series <- Series %>% tibble::as.tibble()
+  Series <- Series %>% tibble::as_tibble()
   print("Encontradas " %+% length(Series$catalogo_id) %+% " serie/s.")
   return(Series)
 }
@@ -32,5 +32,5 @@ ListadoMake <- function() {
 # Descargar Metadatos si tienen mas de un mes
 Listado <- ListadoMake()
 LastUpdate <- Sys.time()
-devtools::use_data(Listado, overwrite = TRUE)
-devtools::use_data(LastUpdate, overwrite = TRUE)
+usethis::use_data(Listado, overwrite = TRUE)
+usethis::use_data(LastUpdate, overwrite = TRUE)

@@ -21,7 +21,7 @@ Get(series, start_date = NULL, end_date = NULL,
 
 \item{collapse_aggregation}{Indica la función de agregación temporal que debe usarse para homogeneizar la frecuencia temporal de todas las series solicitadas}
 
-\item{limit}{Limite de datos a obtener (máximo actual de la API 1000)}
+\item{limit}{Limite de datos a obtener (para evitar descargas fallidas siempre verificar el cumplimiento de los máximos permitidos por la API)}
 
 \item{timeout}{Timeout para la conección a la API de datos}
 }

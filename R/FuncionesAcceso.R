@@ -16,7 +16,7 @@ magrittr::`%>%`
   dias <- format(as.numeric(difftime(Sys.time(), LastUpdate, units = "days")), digits = 0)
   packageStartupMessage(
     "=============================================================================" %+% "\n" %+%
-    "Acceso API Portal Datos Hacienda - v 0.5.1 - 12-2017 por F. García Díaz" %+% "\n" %+%
+    "Acceso API Portal Datos Hacienda - v 0.5.2 - 08-2019 por F. García Díaz" %+% "\n" %+%
     "Última actualización de la base de series incluída en el paquete: " %+% dias %+% " días" %+% "\n" %+%
     "Series en la base de meta-datos: " %+% dim(Listado)[1] )
 }
@@ -47,7 +47,7 @@ freq <- function(x) {
 #' @param representation_mode Indica el modo de representación de las series
 #' @param collapse Modifica la frecuencia de muestreo de los datos de la serie
 #' @param collapse_aggregation Indica la función de agregación temporal que debe usarse para homogeneizar la frecuencia temporal de todas las series solicitadas
-#' @param limit Limite de datos a obtener (máximo actual de la API 1000)
+#' @param limit Limite de datos a obtener (para evitar descargas fallidas siempre verificar el cumplimiento de los máximos permitidos por la API)
 #' @param timeout Timeout para la conección a la API de datos
 #'
 #' @return Un objeto XTS con la serie seleccionada en ID
