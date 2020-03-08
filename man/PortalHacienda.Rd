@@ -3,7 +3,6 @@
 \docType{package}
 \name{PortalHacienda}
 \alias{PortalHacienda}
-\alias{PortalHacienda-package}
 \title{PortalHacienda: Interface R a la API de datos del Ministerio de Hacienda}
 \description{
 PortalHacienda: Interface R a la API de datos del Ministerio de Hacienda

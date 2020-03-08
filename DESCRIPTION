@@ -22,6 +22,6 @@ Imports: dplyr,
     magrittr,
     nlme,
     foreign
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Suggests:
 Depends: R (>= 2.10), zoo

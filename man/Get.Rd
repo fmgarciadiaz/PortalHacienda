@@ -4,9 +4,16 @@
 \alias{Get}
 \title{Acceder a la API del Portal de Datos}
 \usage{
-Get(series, start_date = NULL, end_date = NULL,
-  representation_mode = NULL, collapse = NULL,
-  collapse_aggregation = NULL, limit = 1000, timeout = 5)
+Get(
+  series,
+  start_date = NULL,
+  end_date = NULL,
+  representation_mode = NULL,
+  collapse = NULL,
+  collapse_aggregation = NULL,
+  limit = 1000,
+  timeout = 5
+)
 }
 \arguments{
 \item{series}{ID de la serie a obtener}
